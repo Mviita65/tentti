@@ -1,0 +1,88 @@
+{
+  "tentit": [
+    {
+      "tenttiid": "828bbeb-d72-8a4f-7735-d8268faecc80",
+      "tentti": "TENTTI A",
+      "kysymykset": [
+        {
+          "kysymysid": "0ece6e0-081b-7dff-073a-cc16bbbde0ec",
+          "kysymys": "Mitä kuuluu?",
+          "vaihtoehdot": [
+            {
+              "vaihtoehtoid": "4017e6-d1de-7820-fb24-3315e7af8d",
+              "vaihtoehto": "Kiitos hyvää, entä sinulle?",
+              "valittu": true,
+              "korrekti": 1
+            },
+            {
+              "vaihtoehtoid": "8126e54-de47-87b7-bf-e4057b1dbaa8",
+              "vaihtoehto": "Siinähän se!",
+              "valittu": 0,
+              "korrekti": 0
+            },
+            {
+              "vaihtoehtoid": "53b714d-2b4f-a264-1f5-e7f7573317",
+              "vaihtoehto": "Mitäs siinä kyselet, hoida omat asias!",
+              "valittu": 0,
+              "korrekti": 0
+            }
+          ]
+        },
+        {
+          "kysymysid": "331c827-26c-0fea-426b-32850087e3a",
+          "kysymys": "Miten työpäivä meni?",
+          "vaihtoehdot": [
+            {
+              "vaihtoehtoid": "542cac-5052-ec4-4bc3-8f8507d06736",
+              "vaihtoehto": "Kiitos, uni maistui!",
+              "valittu": 0,
+              "korrekti": 0
+            },
+            {
+              "vaihtoehtoid": "10ba835-75f3-b71c-178e-536b064827a7",
+              "vaihtoehto": "Pelastin maailman!",
+              "valittu": 0,
+              "korrekti": 0
+            },
+            {
+              "vaihtoehtoid": "3cffaca-0a5-b66-634f-44f1281ad636",
+              "vaihtoehto": "Kuis ittelläs?",
+              "valittu": 0,
+              "korrekti": 0
+            },
+            {
+              "vaihtoehtoid": "d24b8-f6fc-f0d5-ba3-1d74d12c335",
+              "vaihtoehto": "Tein töitä palkkani edestä.",
+              "valittu": true,
+              "korrekti": 1
+            }
+          ]
+        },
+        {
+          "kysymysid": "3a4b0e3-ee33-adc1-62e8-71a6e7d386ed",
+          "kysymys": "Suomi on?",
+          "vaihtoehdot": [
+            {
+              "vaihtoehtoid": "47cf02d-bbc7-754c-d150-cc43bb0cb",
+              "vaihtoehto": "Itsenäinen muista riippumaton tasavalta!",
+              "valittu": 0,
+              "korrekti": 0
+            },
+            {
+              "vaihtoehtoid": "6eb3d22-6b73-a835-e062-de76ef280dda",
+              "vaihtoehto": "Kuningaskunta!",
+              "valittu": 0,
+              "korrekti": 0
+            },
+            {
+              "vaihtoehtoid": "d721601-040-6df-65b4-d5cc54764101",
+              "vaihtoehto": "Yksi EU:n jäsenvaltioista!",
+              "valittu": true,
+              "korrekti": 1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

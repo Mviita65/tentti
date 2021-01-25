@@ -1,0 +1,88 @@
+{
+  "tentit": [
+    {
+      "id": 0,
+      "tentti": "TENTTI A",
+      "kysymykset": [
+        {
+          "id": 0,
+          "kysymys": "Mitä kuuluu?",
+          "vaihtoehdot": [
+            {
+              "id": 0,
+              "teksti": "Kiitos hyvää, entä sinulle?",
+              "valittu": false,
+              "korrekti": 1
+            },
+            {
+              "id": 1,
+              "teksti": "Siinähän se!",
+              "valittu": false,
+              "korrekti": 0
+            },
+            {
+              "id": 2,
+              "teksti": "Mitäs siinä kyselet, hoida omat asias!",
+              "valittu": false,
+              "korrekti": 0
+            }
+          ]
+        },
+        {
+          "id": 1,
+          "kysymys": "Miten nukuit?",
+          "vaihtoehdot": [
+            {
+              "id": 0,
+              "teksti": "Kiitos, uni maistui!",
+              "valittu": 0,
+              "korrekti": 1
+            },
+            {
+              "id": 1,
+              "teksti": "Kiitos, hyvin!",
+              "valittu": 0,
+              "korrekti": 1
+            },
+            {
+              "id": 2,
+              "teksti": "Kyljelläni!",
+              "valittu": 0,
+              "korrekti": 1
+            },
+            {
+              "id": 3,
+              "teksti": "Mikään ylläolevista vaihtoehdoista ei toteutunut.",
+              "valittu": 0,
+              "korrekti": 1
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "kysymys": "Suomi on?",
+          "vaihtoehdot": [
+            {
+              "id": 0,
+              "teksti": "Itsenäinen muista riippumaton tasavalta!",
+              "valittu": 0,
+              "korrekti": 0
+            },
+            {
+              "id": 1,
+              "teksti": "Kuningaskunta!",
+              "valittu": false,
+              "korrekti": 0
+            },
+            {
+              "id": 2,
+              "teksti": "Yksi EU:n jäsenvaltioista!",
+              "valittu": false,
+              "korrekti": 1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

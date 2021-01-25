@@ -1,0 +1,149 @@
+.grid-container {
+  display: grid;
+  grid-template-columns: 15% 70% 15%;
+  justify-content: center;
+  padding: 0.5em;
+  background-color:#fafafa;
+}
+
+.grid-item {
+  padding:0.5em;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 400;
+  color:#3f51b5;
+  grid-column-start: 2;
+  grid-column-end: 3;
+}
+
+
+nav {
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 400;
+  grid-column-start: 1;
+  grid-column-end: 4;
+  padding: 1.25rem;
+  color: #fafafa; 
+  text-align: left; 
+}
+
+section {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  padding: 0rem;
+  color: black;
+}
+
+.sovellusvalikko {
+  background-color:#3f51b5;
+  vertical-align: middle;
+  color: #fafafa;
+}
+
+.tenttivalikko {
+  display: flex;
+  flex-wrap: wrap;
+  background-color:#fafafa;
+  color:#3f51b5;
+}
+
+.s-nav-item, .t-nav-item {
+  padding: 0.25rem;
+}
+
+.s-nav-item-right {
+  padding: 0.25rem;
+  float: right;
+}
+
+
+.t-nav-item:hover, .add-item:hover {
+  background-color: rgb(225, 245, 248)
+}
+
+.s-nav-item:hover, .s-nav-item-right:hover, .button:hover, .add-ve:hover {
+  background-color: rgb(60, 60, 196);
+}
+
+.kysymys {
+  font-weight: bold;
+  background-color: white;
+  padding: 0.75rem;
+  border-radius: 15px;
+  border: solid;
+  border-color: #f7f5f5;;
+}
+
+.kurssivalinta {
+  font-weight: bold;
+}
+
+.vastaus {
+  font-weight: normal;
+  padding: 0.75rem;
+}
+
+.alavalinta {
+  padding: 1rem;
+}
+
+.button {
+  float: left;
+  margin: 5px;
+  padding: 0.25rem;
+  width: 5rem;
+  background-color:#3f51b5;
+  color: #fafafa;
+  border-radius: 15px;
+  border: solid;
+  border-color:#3f51b5;
+}
+
+.delButton {
+  vertical-align: middle;
+  padding: 0.25rem;
+  border-radius: 15px;
+  border: none;
+  background-color: gray;
+  color: #fafafa;
+}
+
+.add {
+  text-align: center;
+  vertical-align: middle;
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.add-item {
+  text-align:center;
+  padding: 0.25rem;
+  vertical-align: middle;
+  color:#fafafa;
+  border-radius: 75px;
+  border: none;
+  background-color:#3f51b5;
+}
+
+.add-ve {
+  vertical-align: middle;
+  padding: 0.25rem;
+  color: #fafafa;
+  border-radius: 75px;
+  border: none;
+  background-color:gray;
+}
+
+img {
+  vertical-align: middle;
+  width: 2rem;
+  height: 2rem;
+ }
+
+input[type=text] {
+  width: 270px;
+}
+
+.charts {
+  max-width: 600px;
+  max-height: 1200px;
+}
