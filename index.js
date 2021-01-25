@@ -29,7 +29,6 @@ var corsOptions = {  // tietoturva: määritellään mistä originista sallitaan
 app.use(cors(corsOptions))
 
 app.use('/socket.io', express.static(__dirname + '/node_modules/socket.io')) //static socket.io
-// var io = require('socket.io')(5000); 
 
 const port = 4000
 const db = require('./db')
@@ -58,8 +57,7 @@ io.sockets.on('connection', (socket) => {
 //   console.log(data.payload); 
 // })
  
-
-httpServer.listen(9000)
+httpServer.listen(process.env.PORT || 9000)
 
 // var requestTime = function (req, res, next) {
 //   // req.requestTime = Date.now()
@@ -681,7 +679,7 @@ app.get('*', (req,res)=>{
   res.sendFile(path.join(__dirname+'/client/build/index.html'));
 });
 
-app.listen(port, () => {
+app.listen(process.env.PORT || port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
 
