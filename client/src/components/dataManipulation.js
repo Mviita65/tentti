@@ -1,6 +1,16 @@
 import Axios from 'axios';
 
-  
+var path = null
+switch (process.env.NODE_ENV) {
+  case 'production':
+    path = 'https://tenttimv.herokuapp.com/'
+    break;
+  case 'development':
+    path = 'https://localhost:4000/'
+    break;
+  default:
+    break;
+} 
 
   const muutaTentti = async(dispatch,event,data,aktiivinenTentti) => {
     let id = data.tenttiid
@@ -8,7 +18,7 @@ import Axios from 'axios';
       tentti: event.value.toUpperCase(),
     }
     try {
-      let result = await Axios.put("http://localhost:4000/tentti/"+id,body)
+      let result = await Axios.put(path + "tentti/"+id,body)
       dispatch({type:"TENTTI_NIMETTY", data:{newTenttiNimi: body.tentti, tenttiIndex: aktiivinenTentti}})
     } catch (exception) {
       console.log(exception)
@@ -22,7 +32,7 @@ import Axios from 'axios';
       kysymys_aihe_id: props.data.kysymykset[kysymysIndex].kysymys_aihe_id
     } 
     try {
-      let result = await Axios.put("http://localhost:4000/kysymys/"+id,body)
+      let result = await Axios.put(path + "kysymys/"+id,body)
       props.dispatch({ type: "KYSYMYS_NIMETTY", 
         data: {kysymys: body.kysymys, tenttiIndex: props.tenttiIndex, kyIndex: kysymysIndex} })
     } catch (exception) {
@@ -38,7 +48,7 @@ import Axios from 'axios';
       vaihtoehto_kysymys_id: props.data.kysymysid
     } 
     try {
-      let result = await Axios.put("http://localhost:4000/vaihtoehto/"+id,body)
+      let result = await Axios.put(path + "vaihtoehto/"+id,body)
       props.dispatch({ type: "VAIHTOEHTO_NIMETTY", 
         data: { vaihtoehto: body.vaihtoehto, tenttiIndex: props.tenttiIndex, kyIndex: props.kysymysIndex, veIndex: veIndex } })
     } catch (exception) {
@@ -54,7 +64,7 @@ import Axios from 'axios';
       vaihtoehto_kysymys_id: props.data.kysymysid
     } 
     try {
-      let result = await Axios.put("http://localhost:4000/vaihtoehto/"+id,body)
+      let result = await Axios.put(path + "vaihtoehto/"+id,body)
       props.dispatch({ type: "OIKEA_VAIHDETTU", 
         data: { korrekti: body.korrekti, tenttiIndex: props.tenttiIndex, kyIndex: props.kysymysIndex, veIndex: veIndex } })
     } catch (exception) {
@@ -74,11 +84,11 @@ import Axios from 'axios';
     }
     try {
       if (body.vastaus) {
-        let result = await Axios.post("http://localhost:4000/vastaus",body)
+        let result = await Axios.post(path + "vastaus",body)
       } else {
-        let result2 = await Axios.get("http://localhost:4000/kayttaja/"+kayttajaid+"/tentti/"+props.tenttiid+"/vaihtoehto/"+body.vastaus_vaihtoehto_id)
+        let result2 = await Axios.get(path + "kayttaja/"+kayttajaid+"/tentti/"+props.tenttiid+"/vaihtoehto/"+body.vastaus_vaihtoehto_id)
         vastausid = result2.data[0].vastausid
-        let poistoresult = await Axios.delete("http://localhost:4000/vastaus/"+vastausid)
+        let poistoresult = await Axios.delete(path + "vastaus/"+vastausid)
       }
     } catch (exception) {
         console.log(exception)
@@ -93,7 +103,7 @@ import Axios from 'axios';
       tentti: uusiTenttiNimi
     }
     try {
-      let result = await Axios.post("http://localhost:4000/tentti",body)
+      let result = await Axios.post(path + "tentti",body)
       let tenttiId = result.data[0].tenttiid
       let body2 = {
         kurssi_kurssi_id: aktiivinenKurssi,
@@ -105,13 +115,13 @@ import Axios from 'axios';
         pistemaara: null,
         tenttialoituspvm: null
       }
-      let result2 = await Axios.post("http://localhost:4000/kurssitentti",body2)
+      let result2 = await Axios.post(path + "kurssitentti",body2)
       let uusiTentti = {
         tenttiid: tenttiId,
         tentti: body.tentti,
         kysymykset: []
       }
-      let result3 = await Axios.post("http://localhost:4000/tenttikasittelija",body3)
+      let result3 = await Axios.post(path + "tenttikasittelija",body3)
       dispatch({type: "TENTTI_LISATTY", data:{lisays: uusiTentti}})
     } catch (exception) {
       console.log(exception)
@@ -124,13 +134,13 @@ import Axios from 'axios';
       kysymys_aihe_id: 0
     } 
     try {
-      let result = await Axios.post("http://localhost:4000/kysymys",body)
+      let result = await Axios.post(path + "kysymys",body)
       let id = result.data[0].kysymysid
       let body2 = {
         tkysymys_kysymys_id: id,
         tkysymys_tentti_id: props.data.tenttiid
       }
-      let result2 = await Axios.post("http://localhost:4000/tenttikysymys",body2)
+      let result2 = await Axios.post(path + "tenttikysymys",body2)
       props.dispatch({type: "KYSYMYS_LISATTY", 
         data:{tenttiIndex: props.tenttiIndex, kysymysid: body2.tkysymys_kysymys_id}})
     } catch (exception) {
@@ -145,7 +155,7 @@ import Axios from 'axios';
       vaihtoehto_kysymys_id: props.data.kysymysid
     } 
     try {
-      let result = await Axios.post("http://localhost:4000/vaihtoehto/kysymys/"+props.data.kysymysid,body)
+      let result = await Axios.post(path + "vaihtoehto/kysymys/"+props.data.kysymysid,body)
       let vaihtoehtoid = result.data[0].vaihtoehtoid
       props.dispatch({type: "VAIHTOEHTO_LISATTY", 
         data:{tenttiIndex: props.tenttiIndex, kyIndex: props.kysymysIndex, vaihtoehtoid: vaihtoehtoid} })
@@ -157,7 +167,7 @@ import Axios from 'axios';
   const poistaTenttiKurssilta = async(dispatch,data,index,kurssiid) => {
     let tenttiid = data.tenttiid
     try {
-      let result = await Axios.delete("http://localhost:4000/kurssitentti/"+tenttiid+"/kurssi/"+kurssiid)
+      let result = await Axios.delete(path + "kurssitentti/"+tenttiid+"/kurssi/"+kurssiid)
       dispatch({type: "TENTTI_POISTETTU", data:{ tenttiIndex: index} })
     } catch (exception) {
       console.log(exception)
@@ -168,7 +178,7 @@ import Axios from 'axios';
     let kysymysid = props.data.kysymykset[kysymysIndex].kysymysid
     let tenttiid = props.data.tenttiid
     try {
-      let result = await Axios.delete("http://localhost:4000/tenttikysymys/"+kysymysid+"/tentti/"+tenttiid)
+      let result = await Axios.delete(path + "tenttikysymys/"+kysymysid+"/tentti/"+tenttiid)
       props.dispatch({type: "KYSYMYS_POISTETTU", 
         data:{ tenttiIndex: props.tenttiIndex, kyIndex: kysymysIndex } })
     } catch (exception) {
@@ -179,7 +189,7 @@ import Axios from 'axios';
   const poistaVaihtoehto = async(props,veIndex) => {
     let id = props.data.vaihtoehdot[veIndex].vaihtoehtoid
     try {
-      let result = await Axios.delete("http://localhost:4000/vaihtoehto/"+id)
+      let result = await Axios.delete(path + "vaihtoehto/"+id)
       props.dispatch({type: "VAIHTOEHTO_POISTETTU", 
         data:{ tenttiIndex: props.tenttiIndex, kyIndex: props.kysymysIndex, veIndex: veIndex }})
     } catch (exception) {

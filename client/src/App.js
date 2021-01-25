@@ -58,7 +58,7 @@ function App() {
       path = 'https://tenttimv.herokuapp.com/'
       break;
     case 'development':
-      path = 'https://localhost:4000'
+      path = 'https://localhost:4000/'
       break;
     default:
       break;
@@ -82,18 +82,18 @@ function App() {
           // let result = await Axios.get("http://localhost:3001/tentit/")
           let kurssiid = aktiivinenKurssi
           let kayttajaid = aktiivinenKayttaja // oppilas eli vastaukset yhdeltä oppilaalta
-          let result = await Axios.get("http://localhost:4000/kurssi/" + kurssiid)
+          let result = await Axios.get(path + "kurssi/" + kurssiid)
           if (result.data.length > 0) {
             for (var i = 0; i < result.data.length; i++) {       // käydään läpi noudetun kurssin tentit
               result.data[i].kysymykset = []
-              let kysymykset = await Axios.get("http://localhost:4000/kysymys/tentti/" + result.data[i].tenttiid)
+              let kysymykset = await Axios.get(path + "kysymys/tentti/" + result.data[i].tenttiid)
               result.data[i].kysymykset = kysymykset.data
               if (result.data[i].kysymykset.length > 0) {
                 for (var j = 0; j < result.data[i].kysymykset.length; j++) { // käydään läpi noudetut tentin kysymykset
                   result.data[i].kysymykset[j].vaihtoehdot = []
-                  let vaihtoehdot = await Axios.get("http://localhost:4000/vaihtoehto/kysymys/" + result.data[i].kysymykset[j].kysymysid)
+                  let vaihtoehdot = await Axios.get(path + "vaihtoehto/kysymys/" + result.data[i].kysymykset[j].kysymysid)
                   result.data[i].kysymykset[j].vaihtoehdot = vaihtoehdot.data
-                  let vastaukset = await Axios.get("http://localhost:4000/kayttaja/" + kayttajaid + "/kysymys/" + result.data[i].kysymykset[j].kysymysid)
+                  let vastaukset = await Axios.get(path + "kayttaja/" + kayttajaid + "/kysymys/" + result.data[i].kysymykset[j].kysymysid)
                   if (result.data[i].kysymykset[j].vaihtoehdot.length > 0) {
                     for (var k = 0; k < result.data[i].kysymykset[j].vaihtoehdot.length; k++) {  // käydään läpi noudetut kysymyksen vaihtoehdot
                       result.data[i].kysymykset[j].vaihtoehdot[k].valittu = false               // käyttäjän vastaukset alustetaan falsella
@@ -162,7 +162,7 @@ function App() {
   const onDrop = useCallback(files => {
     console.log(files);
 
-    const req = request.post('http://localhost:4000/upload');
+    const req = request.post('pathupload');
 
     files.forEach(file => {
       req.attach('file', file);
@@ -193,7 +193,7 @@ function App() {
   const tarkistaLogin = async (e, userdata) => {
     e.preventDefault();
     try {
-      let kayttaja = await Axios.post("http://localhost:4000/login", userdata)
+      let kayttaja = await Axios.post("pathlogin", userdata)
       if (kayttaja.lenght === 0) {
         console.log("Invalid username of password")
         return
@@ -211,7 +211,7 @@ function App() {
     e.preventDefault();
 
     try {
-      let kayttaja = await Axios.post("http://localhost:4000/register", uusiKayttaja)
+      let kayttaja = await Axios.post("pathregister", uusiKayttaja)
       if (kayttaja.lenght === 0) {
         console.log("missä mättää?")
         return

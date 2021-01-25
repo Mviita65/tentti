@@ -9,10 +9,22 @@ const Kurssivalikko = ({
   kurssiDataIndex,setKurssiDataIndex,
   tentit,setTentit,lang}) => {
 
+    var path = null
+    switch (process.env.NODE_ENV) {
+      case 'production':
+        path = 'https://tenttimv.herokuapp.com/'
+        break;
+      case 'development':
+        path = 'https://localhost:4000/'
+        break;
+      default:
+        break;
+    } 
+
   const fetchKurssiData = async () => {
     try {
       let kurssitiedot = []
-      let result = await Axios.get("http://localhost:4000/kurssi")
+      let result = await Axios.get(path + "kurssi")
       if (result.data.length > 0){
         for (var i = 0; i < result.data.length; i++){
           let kurssitieto = {

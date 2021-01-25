@@ -6,10 +6,22 @@ import strings from './merkkijonot';
 
 const Tenttivalikko = ({tenttiData,setTenttiData,setAktiivinenTentti,aktiivinenTentti,setAktiivinenKurssi,aktiivinenKurssi,setKurssiDataIndex,kurssiData,lang}) => {
 
+  var path = null
+    switch (process.env.NODE_ENV) {
+      case 'production':
+        path = 'https://tenttimv.herokuapp.com/'
+        break;
+      case 'development':
+        path = 'https://localhost:4000/'
+        break;
+      default:
+        break;
+} 
+
   const fetchTenttiData = async () => {
     try {
       let tenttitiedot = []
-      let result = await Axios.get("http://localhost:4000/tentti")
+      let result = await Axios.get(path + "tentti")
       if (result.data.length > 0){
         for (var i = 0; i < result.data.length; i++){
           let tenttitieto = {
