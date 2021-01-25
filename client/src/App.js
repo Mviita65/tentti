@@ -48,10 +48,21 @@ function App() {
   const [vahvistusTeksti, setVahvistusTeksti] = useState("")
   const [vahvistusTehtava, setVahvistusTehtava] = useState("")
   const [vahvistusPoisto, setVahvistusPoisto] = useState("")
-  const [sviesti, setSviesti] = useState("")
   const endPoint = "ws://localhost:9000"
   const lang = navigator.language
   const { enqueueSnackbar } = useSnackbar();
+
+  var path = null
+  switch (process.env.NODE_ENV) {
+    case 'production':
+      path = 'https://.herokuapp.com/'
+      break;
+    case 'development':
+      path = 'https://localhost:4000'
+      break;
+    default:
+      break;
+  }
 
   useEffect(() => {
 
