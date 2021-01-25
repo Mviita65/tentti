@@ -55,7 +55,7 @@ function App() {
   var path = null
   switch (process.env.NODE_ENV) {
     case 'production':
-      path = 'https://.herokuapp.com/'
+      path = 'https://tenttimv.herokuapp.com/'
       break;
     case 'development':
       path = 'https://localhost:4000'
