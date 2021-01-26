@@ -13,10 +13,10 @@ app.use(fileUpload({
 
 const httpServer = require('http').createServer()  // tarvittiin webSocket vaiheessa
 
-if (process.env.HEROKU) {
+if (process.env.NODE_ENV === 'production') {
   appOrigin = "https://tenttimv.herokuapp.com"
 } else {
-  appOrigin = "http://localhost:4000"
+  appOrigin = "http://localhost:3000"
 }
 
 const io = require('socket.io')(httpServer, {

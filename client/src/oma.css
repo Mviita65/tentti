@@ -33,9 +33,14 @@ section {
   color: black;
 }
 
+.dropzone {
+  border-radius: 15px;
+  border: solid;
+  border-color: #f7f5f5;
+  color: rgb(211, 208, 208);
+}
+
 .sovellusvalikko {
-  display: flex;
-  flex-wrap: wrap;
   background-color:#3f51b5;
   vertical-align: middle;
   color: #fafafa;
@@ -72,7 +77,7 @@ section {
   padding: 0.75rem;
   border-radius: 15px;
   border: solid;
-  border-color: #f7f5f5;;
+  border-color: #f7f5f5;
 }
 
 .kurssivalinta {

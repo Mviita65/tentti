@@ -12,7 +12,7 @@ const Tenttivalikko = ({tenttiData,setTenttiData,setAktiivinenTentti,aktiivinenT
         path = 'https://tenttimv.herokuapp.com/'
         break;
       case 'development':
-        path = 'https://localhost:4000/'
+        path = 'http://localhost:4000/'
         break;
       default:
         break;

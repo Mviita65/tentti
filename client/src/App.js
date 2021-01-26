@@ -58,10 +58,10 @@ function App() {
       path = 'https://tenttimv.herokuapp.com/'
       break;
     case 'development':
-      path = 'https://localhost:4000/'
+      path = 'http://localhost:4000/'
       break;
     case 'test':
-      path = 'https://localhost:4000/'
+      path = 'http://localhost:4000/'
       break;
     default:
       throw "Check environment settings"
@@ -230,38 +230,46 @@ function App() {
   return (
     <div>{login ? <section className="grid-container">
       <nav className="sovellusvalikko">
+        <span className="s-nav-item" onClick={e => {        // kaikki KURSSIT näkyviin
+            setTentit(0); setTietoa(0); setAktiivinenTentti(null); setAktiivinenKurssi(null); setKurssiDataIndex(null);
+          }}> {strings.kurssit} 
+        </span> {kurssiDataIndex !== null ? 
+          <span className="s-nav-item" onClick={e => {      // valitun kurssin TENTIT näkyviin
+              setAktiivinenTentti(null); setTentit(1); setTietoa(0); setVastaukset(0); setKaaviot(0);
+            }}> {strings.tentit} 
+          </span> : 
+          <span className="s-nav-item" onClick={e => {      // kaikki TENTIT näkyviin (ei ole valittua kurssia)
+              setTentit(1); setTietoa(0); setAktiivinenTentti(null); setAktiivinenKurssi(null); setKurssiDataIndex(null);
+            }}> {strings.tentit} 
+        </span>}
         <span className="s-nav-item" onClick={e => {
-          setTentit(0); setTietoa(0); setAktiivinenTentti(null); setAktiivinenKurssi(null); setKurssiDataIndex(null);
-        }}>{strings.kurssit} </span>
-        {kurssiDataIndex !== null ? <span className="s-nav-item" onClick={e => {
-          setAktiivinenTentti(null); setTentit(1); setTietoa(0); setVastaukset(0); setKaaviot(0);
-        }}>{strings.tentit} </span> : <span className="s-nav-item" onClick={e => {
-          setTentit(1); setTietoa(0); setAktiivinenTentti(null); setAktiivinenKurssi(null); setKurssiDataIndex(null);
-        }}>{strings.tentit} </span>}
-        <span className="s-nav-item" onClick={e => {
-          setTentit(0); setKaaviot(0); setTietoa(1);
-        }}>{strings.tietoa}</span>
-        <span className="s-nav-item" onClick={e => {
-          setHallinta(!hallinta)
-        }}><BuildIcon fontSize="small" /> </span>
-        <span className="s-nav-item-right" onClick={e => {      // POISTU toiminto tässä !!!!!!!!
-          setTentit(0); setKaaviot(0); setLogin(false); setAktiivinenKayttaja(null); setAktiivinenKurssi(null);
-          window.localStorage.removeItem('loggedAppUser');
-          window.location.reload();
-        }}>{strings.poistu} </span>
-        <span className="s-nav-item-right">{kayttajaNimi} - </span>
+            setTentit(0); setKaaviot(0); setTietoa(1);      // näytetään TIETOA
+          }}> {strings.tietoa}
+        </span>
+        <span className="s-nav-item" onClick={e => {        // vaihdetaan HALLINTA (päälle/pois)
+            setHallinta(!hallinta)
+          }}> <BuildIcon fontSize="small"/> 
+        </span>
+        <span className="s-nav-item-right" onClick={e => {  // POISTUTAAN
+            setTentit(0); setKaaviot(0); setLogin(false); setAktiivinenKayttaja(null); setAktiivinenKurssi(null);
+            window.localStorage.removeItem('loggedAppUser');
+            window.location.reload();
+          }}> {strings.poistu} 
+        </span>
+        <span className="s-nav-item-right"> {kayttajaNimi} - </span>
       </nav>
       <div className="dropzone" {...getRootProps()}>
+        DROPZONE       
         <input {...getInputProps()} />
-        {
+        {                                                   // DROPZONE
           isDragActive ? "" : ""
         }
       </div>
-      {aktiivinenKurssi === null && !tentit ?      // kurssivalikko näkyviin, ei vielä valittua kurssia
+      {aktiivinenKurssi === null && !tentit ?               // kurssivalikko näkyviin, ei vielä valittua kurssia
         <section className="tenttivalikko">
           <Kurssivalikko aktiivinenKurssi={aktiivinenKurssi} setAktiivinenKurssi={setAktiivinenKurssi} kurssiData={kurssiData} setKurssiData={setKurssiData} tentit={tentit} setTentit={setTentit} kurssiDataIndex={kurssiDataIndex} setKurssiDataIndex={setKurssiDataIndex} lang={lang} />
         </section>
-        : aktiivinenKurssi === null && tentit ?      // tenttivalikko näkyviin, ei ole valittua kurssia
+        : aktiivinenKurssi === null && tentit ?             // tenttivalikko näkyviin, ei ole valittua kurssia
           <section className="tenttivalikko">
             <Tenttivalikko tenttiData={tenttiData} setTenttiData={setTenttiData} aktiivinenTentti={aktiivinenTentti} setAktiivinenTentti={setAktiivinenTentti} aktiivinenKurssi={aktiivinenKurssi} setAktiivinenKurssi={setAktiivinenKurssi} kurssiData={kurssiData} setKurssiDataIndex={setKurssiDataIndex} lang={lang} />
           </section> : aktiivinenKurssi !== null && tentit ?   // kurssi valittu, näytetään kurssin tentit
