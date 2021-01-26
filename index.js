@@ -678,6 +678,7 @@ app.post('/upload', async (req, res) => {
 
 // --------------------------Älä kommentoi pois ------------------------------------------------------
 app.get('*', (req,res)=>{
+  console.log("Palvellaan index.html")
   res.sendFile(path.join(__dirname+'/client/build/index.html'));
 });
 
