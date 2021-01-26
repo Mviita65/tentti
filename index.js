@@ -15,14 +15,14 @@ const httpServer = require('http').createServer()  // tarvittiin webSocket vaihe
 
 const io = require('socket.io')(httpServer, {
   cors: {
-    origin: "https://tenttimv.heroku.com",
+    origin: "https://tenttimv.herokuapp.com",
     // origin: "http://localhost:4000",
     methods: ["GET", "POST"]
   }
 })
 
 var corsOptions = {  // tietoturva: määritellään mistä originista sallitaan http-pyynnöt
-  origin: "https://tenttimv.heroku.com",
+  origin: "https://tenttimv.herokuapp.com",
   // origin: 'http://localhost:4000',
   optionsSuccessStatus: 200, // For legacy browser support
   methods: "GET,PUT,POST,DELETE"
