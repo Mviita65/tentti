@@ -162,7 +162,7 @@ function App() {
   const onDrop = useCallback(files => {
     console.log(files);
 
-    const req = request.post('pathupload');
+    const req = request.post(`${path}upload`);
 
     files.forEach(file => {
       req.attach('file', file);
