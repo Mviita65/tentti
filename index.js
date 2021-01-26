@@ -59,7 +59,7 @@ io.sockets.on('connection', (socket) => {
 //   console.log(data.payload); 
 // })
  
-httpServer.listen(process.env.PORT || 9000)
+httpServer.listen(9000)
 
 // var requestTime = function (req, res, next) {
 //   // req.requestTime = Date.now()
