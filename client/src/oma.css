@@ -34,6 +34,8 @@ section {
 }
 
 .sovellusvalikko {
+  display: flex;
+  flex-wrap: wrap;
   background-color:#3f51b5;
   vertical-align: middle;
   color: #fafafa;

@@ -13,6 +13,8 @@ app.use(fileUpload({
 
 const httpServer = require('http').createServer()  // tarvittiin webSocket vaiheessa
 
+if (process.env.HEROKU) {
+
 const io = require('socket.io')(httpServer, {
   cors: {
     origin: "https://tenttimv.herokuapp.com",

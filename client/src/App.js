@@ -60,8 +60,11 @@ function App() {
     case 'development':
       path = 'https://localhost:4000/'
       break;
-    default:
+    case 'test':
+      path = 'https://localhost:4000/'
       break;
+    default:
+      throw "Check environment settings"
   }
 
   useEffect(() => {
