@@ -15,14 +15,14 @@ const httpServer = require('http').createServer()  // tarvittiin webSocket vaihe
 
 const io = require('socket.io')(httpServer, {
   cors: {
-    origin: "http://tenttimv.heroku.com",
+    origin: "https://tenttimv.heroku.com",
     // origin: "http://localhost:4000",
     methods: ["GET", "POST"]
   }
 })
 
 var corsOptions = {  // tietoturva: määritellään mistä originista sallitaan http-pyynnöt
-  origin: "http://tenttimv.heroku.com",
+  origin: "https://tenttimv.heroku.com",
   // origin: 'http://localhost:4000',
   optionsSuccessStatus: 200, // For legacy browser support
   methods: "GET,PUT,POST,DELETE"
@@ -58,8 +58,8 @@ io.sockets.on('connection', (socket) => {
 // pg_client.on('notification',async(data)=>{
 //   console.log(data.payload); 
 // })
- 
-httpServer.listen(9000)
+
+httpServer.listen(process.env.PORT || 9000)
 
 // var requestTime = function (req, res, next) {
 //   // req.requestTime = Date.now()
