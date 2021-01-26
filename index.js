@@ -13,17 +13,21 @@ app.use(fileUpload({
 
 const httpServer = require('http').createServer()  // tarvittiin webSocket vaiheessa
 
+if (process.env.HEROKU) {
+  appOrigin = "https://tenttimv.herokuapp.com"
+} else {
+  appOrigin = "http://localhost:4000"
+}
+
 const io = require('socket.io')(httpServer, {
   cors: {
-    origin: "https://tenttimv.herokuapp.com",
-    // origin: "http://localhost:4000",
+    origin: appOrigin,
     methods: ["GET", "POST"]
   }
 })
 
 var corsOptions = {  // tietoturva: määritellään mistä originista sallitaan http-pyynnöt
-  origin: "https://tenttimv.herokuapp.com",
-  // origin: 'http://localhost:4000',
+  origin: appOrigin,
   optionsSuccessStatus: 200, // For legacy browser support
   methods: "GET,PUT,POST,DELETE"
 }
