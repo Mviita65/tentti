@@ -193,7 +193,7 @@ function App() {
   const tarkistaLogin = async (e, userdata) => {
     e.preventDefault();
     try {
-      let kayttaja = await Axios.post("pathlogin", userdata)
+      let kayttaja = await Axios.post(path + "login", userdata)
       if (kayttaja.lenght === 0) {
         console.log("Invalid username of password")
         return
