@@ -211,7 +211,7 @@ function App() {
     e.preventDefault();
 
     try {
-      let kayttaja = await Axios.post("pathregister", uusiKayttaja)
+      let kayttaja = await Axios.post(path + "register", uusiKayttaja)
       if (kayttaja.lenght === 0) {
         console.log("missä mättää?")
         return
