@@ -11,7 +11,7 @@ app.use(fileUpload({
   limits: { fileSize: 2 * 1024 * 1024 * 1024 },
 })); 
 
-const httpServer = require('http').createServer()  // tarvittiin webSocket vaiheessa
+const httpServer = require('http').createServer(app)  // tarvittiin webSocket vaiheessa
 
 if (process.env.NODE_ENV === 'production') {
   appOrigin = "https://tenttimv.herokuapp.com"
