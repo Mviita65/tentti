@@ -3,6 +3,8 @@ const express = require('express')
 var path = require('path')
 var bodyParser = require('body-parser')
 const app = express()
+const httpServer = require('http').createServer(app)  // tarvittiin webSocket vaiheessa
+const port = process.env.PORT || 4000
 app.use(bodyParser.json())
 app.use(express.static('./client/build'))
 
@@ -11,22 +13,14 @@ app.use(fileUpload({
   limits: { fileSize: 2 * 1024 * 1024 * 1024 },
 })); 
 
-const httpServer = require('http').createServer(app)  // tarvittiin webSocket vaiheessa
-
-if (process.env.NODE_ENV === 'production') {
-  appOrigin = "https://tenttimv.herokuapp.com"
+var appOrigin = null
+if (!process.env.HEROKU) {
+  appOrigin = 'http://localhost:3000'
+  console.log(appOrigin)
 } else {
-  appOrigin = "http://localhost:3000"
+  appOrigin = 'https://tenttimv.herokuapp.com'
+  console.log(appOrigin)
 }
-
-const io = require('socket.io')(httpServer)
-
-// const io = require('socket.io')(httpServer, {
-//   cors: {
-//     origin: appOrigin,
-//     methods: ["GET", "POST"]
-//   }
-// })
 
 var corsOptions = {  // tietoturva: määritellään mistä originista sallitaan http-pyynnöt
   origin: appOrigin,
@@ -38,13 +32,19 @@ app.use(cors(corsOptions))
 
 app.use('/socket.io', express.static(__dirname + '/node_modules/socket.io')) //static socket.io
 
-const port = 4000
 const db = require('./db')
 const { response } = require('express')
 
 var jwt = require('jsonwebtoken')
 var bcrypt = require('bcrypt')
 const SALT_ROUNDS = 12
+
+var io = require('socket.io')(httpServer, {
+  cors: {
+    origin: appOrigin,
+    methods: ["GET", "POST"]
+  }
+})
 
 var pg = require('pg'); 
 var con_string = 'tcp://postgres:MAVLtd@localhost/Tenttikanta';
@@ -688,7 +688,7 @@ app.get('*', (req,res)=>{
   res.sendFile(path.join(__dirname+'/client/build/index.html'));
 });
 
-httpServer.listen(process.env.PORT || port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
+httpServer.listen(port, () => {
+  console.log(`App listening at http://localhost:${port}`)
 })
 

@@ -20,7 +20,7 @@ import Kysymykset from './components/kysymykset.js';
 import ChartExample from './components/chart.js';
 import ConfirmDialog from './components/confirmDialog.js';
 import strings from './components/merkkijonot.js';
-import io from "socket.io-client";
+import socketIOClient from "socket.io-client";
 import { useSnackbar } from "notistack";
 
 function App() {
@@ -52,12 +52,15 @@ function App() {
   const { enqueueSnackbar } = useSnackbar();
 
   var path = null
+  var endpoint = null
   switch (process.env.NODE_ENV) {
     case 'production':
       path = 'https://tenttimv.herokuapp.com/'
+      endpoint = 'https://tenttimv.herokuapp.com'
       break;
     case 'development':
       path = 'http://localhost:4000/'
+      endpoint = 'http://localhost:4000'
       break;
     case 'test':
       path = 'http://localhost:4000/'
@@ -179,7 +182,7 @@ function App() {
 
   useEffect(() => {
 
-    const socket = io();
+    const socket = socketIOClient(endpoint);
 
     socket.on('connected', function (data) {
       console.log("Socket.io: Connected")
@@ -189,6 +192,7 @@ function App() {
       console.log(data.message.payload)
       enqueueSnackbar(data.message.payload, 'info')
     });
+    return () => socket.disconnect();
   }, []);
 
 

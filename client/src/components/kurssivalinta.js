@@ -21,6 +21,7 @@ const Kurssivalikko = ({
         break;
     } 
 
+
   const fetchKurssiData = async () => {
     try {
       let kurssitiedot = []
