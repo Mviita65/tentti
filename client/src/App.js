@@ -20,7 +20,7 @@ import Kysymykset from './components/kysymykset.js';
 import ChartExample from './components/chart.js';
 import ConfirmDialog from './components/confirmDialog.js';
 import strings from './components/merkkijonot.js';
-import socketIOClient from "socket.io-client";
+import io from "socket.io-client";
 import { useSnackbar } from "notistack";
 
 function App() {
@@ -48,7 +48,6 @@ function App() {
   const [vahvistusTeksti, setVahvistusTeksti] = useState("")
   const [vahvistusTehtava, setVahvistusTehtava] = useState("")
   const [vahvistusPoisto, setVahvistusPoisto] = useState("")
-  const endPoint = "ws://localhost:9000"
   const lang = navigator.language
   const { enqueueSnackbar } = useSnackbar();
 
@@ -180,7 +179,7 @@ function App() {
 
   useEffect(() => {
 
-    const socket = socketIOClient(endPoint);
+    const socket = io();
 
     socket.on('connected', function (data) {
       console.log("Socket.io: Connected")

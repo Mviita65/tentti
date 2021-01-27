@@ -19,12 +19,14 @@ if (process.env.NODE_ENV === 'production') {
   appOrigin = "http://localhost:3000"
 }
 
-const io = require('socket.io')(httpServer, {
-  cors: {
-    origin: appOrigin,
-    methods: ["GET", "POST"]
-  }
-})
+const io = require('socket.io')(httpServer)
+
+// const io = require('socket.io')(httpServer, {
+//   cors: {
+//     origin: appOrigin,
+//     methods: ["GET", "POST"]
+//   }
+// })
 
 var corsOptions = {  // tietoturva: määritellään mistä originista sallitaan http-pyynnöt
   origin: appOrigin,
@@ -63,7 +65,7 @@ io.sockets.on('connection', (socket) => {
 //   console.log(data.payload); 
 // })
 
-httpServer.listen(9000)
+//httpServer.listen(9000)
 
 // var requestTime = function (req, res, next) {
 //   // req.requestTime = Date.now()
@@ -686,7 +688,7 @@ app.get('*', (req,res)=>{
   res.sendFile(path.join(__dirname+'/client/build/index.html'));
 });
 
-app.listen(process.env.PORT || port, () => {
+httpServer.listen(process.env.PORT || port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
 
