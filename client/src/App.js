@@ -262,7 +262,7 @@ function App() {
         <span className="s-nav-item-right"> {kayttajaNimi} - </span>
       </nav>
       <div className="dropzone" {...getRootProps()}>
-        DROPZONE       
+        DROP ZONE       
         <input {...getInputProps()} />
         {                                                   // DROPZONE
           isDragActive ? "" : ""
