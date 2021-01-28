@@ -54,10 +54,12 @@ section {
 }
 
 .s-nav-item, .t-nav-item {
+  cursor: pointer;
   padding: 0.25rem;
 }
 
 .s-nav-item-right {
+  cursor: pointer;
   padding: 0.25rem;
   float: right;
 }
