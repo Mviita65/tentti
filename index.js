@@ -16,10 +16,10 @@ app.use(fileUpload({
 var appOrigin = null
 if (!process.env.HEROKU) {
   appOrigin = 'http://localhost:3000'
-  console.log(appOrigin)
+  console.log("front:",appOrigin)
 } else {
   appOrigin = 'https://tenttimv.herokuapp.com'
-  console.log(appOrigin)
+  console.log("front:",appOrigin)
 }
 
 var corsOptions = {  // tietoturva: määritellään mistä originista sallitaan http-pyynnöt
