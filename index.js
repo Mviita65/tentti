@@ -3,7 +3,7 @@ const express = require('express')
 var path = require('path')
 var bodyParser = require('body-parser')
 const app = express()
-const httpServer = require('http').createServer(app)  // tarvittiin webSocket vaiheessa
+const httpServer = require('http').createServer(app)  // tarvittiin webSocket ja tämä kuuntelemaan!
 const port = process.env.PORT || 4000
 app.use(bodyParser.json())
 app.use(express.static('./client/build'))

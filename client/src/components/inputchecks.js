@@ -1,5 +1,5 @@
 
-function tarkistaSähköposti(email) {
+function tarkistaSahkoposti(email) {
     if (email === undefined) {
         throw new Error('Sähköpostia ei välitetty, tarkista lomake!');
     }
@@ -17,5 +17,5 @@ function tarkistaSalasana(str){
   }
 
   module.exports = {
-      tarkistaSähköposti, tarkistaSalasana
+      tarkistaSahkoposti, tarkistaSalasana
   }
