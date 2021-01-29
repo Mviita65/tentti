@@ -193,7 +193,7 @@ function App() {
       enqueueSnackbar(data.message.payload, 'info')
     });
     return () => socket.disconnect();
-  }, []);
+  }, [endpoint,enqueueSnackbar]);
 
 
   const tarkistaLogin = async (e, userdata) => {
@@ -204,7 +204,6 @@ function App() {
         console.log("Invalid username of password")
         return
       }
-      console.log(kayttaja)
       setLogin(true)
       setAktiivinenKayttaja(kayttaja.data.id)
       setKayttajaNimi(`${kayttaja.data.etunimi} ${kayttaja.data.sukunimi} (${lang})`)
@@ -222,7 +221,6 @@ function App() {
         console.log("missä mättää?")
         return
       }
-      console.log(kayttaja)
       setRegister(false)
       setAktiivinenKayttaja(kayttaja.data.id)
     } catch (exception) {
