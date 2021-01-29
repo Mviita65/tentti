@@ -64,14 +64,11 @@ section {
   float: right;
 }
 
-
 .t-nav-item:hover, .add-item:hover {
-  cursor: pointer;
   background-color: rgb(225, 245, 248)
 }
 
 .s-nav-item:hover, .s-nav-item-right:hover, .button:hover, .add-ve:hover {
-  cursor: pointer;;
   background-color: rgb(60, 60, 196);
 }
 

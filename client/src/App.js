@@ -66,7 +66,7 @@ function App() {
       path = 'http://localhost:4000/'
       break;
     default:
-      throw "Check environment settings"
+      throw new Error("Check environment settings")
   }
 
   useEffect(() => {
@@ -120,7 +120,7 @@ function App() {
           } else {
             result.data = []
             dispatch({ type: "INIT_DATA", data: result.data })
-            throw ("Nyt pitää data kyllä alustaa!")
+            throw new Error("Nyt pitää data kyllä alustaa!")
           }
         }
         catch (execption) {

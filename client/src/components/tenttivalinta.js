@@ -14,9 +14,12 @@ const Tenttivalikko = ({tenttiData,setTenttiData,setAktiivinenTentti,aktiivinenT
       case 'development':
         path = 'http://localhost:4000/'
         break;
-      default:
+      case 'test':
+        path = 'http://localhost:4000/'
         break;
-} 
+      default:
+        throw new Error("Check environment settings")
+    } 
 
   const fetchTenttiData = async () => {
     try {

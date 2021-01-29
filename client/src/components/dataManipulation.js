@@ -8,8 +8,11 @@ switch (process.env.NODE_ENV) {
   case 'development':
     path = 'http://localhost:4000/'
     break;
-  default:
+  case 'test':
+    path = 'http://localhost:4000/'
     break;
+  default:
+    throw new Error("Check environment settings")
 } 
 
   const muutaTentti = async(dispatch,event,data,aktiivinenTentti) => {

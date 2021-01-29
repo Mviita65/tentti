@@ -17,8 +17,11 @@ const Kurssivalikko = ({
       case 'development':
         path = 'http://localhost:4000/'
         break;
-      default:
+      case 'test':
+        path = 'http://localhost:4000/'
         break;
+      default:
+        throw new Error("Check environment settings")
     } 
 
 

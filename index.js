@@ -14,10 +14,14 @@ app.use(fileUpload({
 })); 
 
 var appOrigin = null
+var con_string = null
 if (!process.env.HEROKU) {
+  con_string = 'tcp://postgres:MAVLtd@localhost/Tenttikanta';
   appOrigin = 'http://localhost:3000'
   console.log("front:",appOrigin)
+
 } else {
+  con_string = process.env.DATABASE_URL
   appOrigin = 'https://tenttimv.herokuapp.com'
   console.log("front:",appOrigin)
 }
@@ -47,7 +51,6 @@ var io = require('socket.io')(httpServer, {
 })
 
 var pg = require('pg'); 
-var con_string = 'tcp://postgres:MAVLtd@localhost/Tenttikanta';
 var pg_client = new pg.Client(con_string);
 pg_client.connect();
 var query = pg_client.query('LISTEN huomio');
