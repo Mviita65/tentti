@@ -60,11 +60,11 @@ const Tenttivalikko = ({tenttiData,setTenttiData,setAktiivinenTentti,aktiivinenT
     <div className="grid-item">{strings.tenttivalinta}
         {tenttiData.map((item, index) =>
             <div key={index} className="kysymys">
-                <a className="t-nav-item" onClick={() =>{
+                <span className="t-nav-item" onClick={() =>{
                 //  setAktiivinenKurssi(item.kurssiid)
                 //  setAktiivinenTentti(item.tenttiid)
-            }}>{item.tentti} ({item.kurssi})</a> <br/>
-              <a className="vastaus"> ● {item.julkaisupvm}, {strings.minimi} {item.minimipisteet}p., {item.etunimi} {item.sukunimi}</a>
+            }}>{item.tentti} ({item.kurssi})</span> <br/>
+              <span className="vastaus"> ● {item.julkaisupvm}, {strings.minimi} {item.minimipisteet}p., {item.etunimi} {item.sukunimi}</span>
             </div>
         )}
     </div>

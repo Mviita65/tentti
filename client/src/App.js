@@ -233,33 +233,33 @@ function App() {
   return (
     <div>{login ? <section className="grid-container">
       <nav className="sovellusvalikko">
-        <a className="s-nav-item" onClick={e => {        // kaikki KURSSIT näkyviin
+        <span className="s-nav-item" onClick={e => {        // kaikki KURSSIT näkyviin
             setTentit(0); setTietoa(0); setAktiivinenTentti(null); setAktiivinenKurssi(null); setKurssiDataIndex(null);
           }}> {strings.kurssit} 
-        </a> {kurssiDataIndex !== null ? 
-          <a className="s-nav-item" onClick={e => {      // valitun kurssin TENTIT näkyviin
+        </span> {kurssiDataIndex !== null ? 
+          <span className="s-nav-item" onClick={e => {      // valitun kurssin TENTIT näkyviin
               setAktiivinenTentti(null); setTentit(1); setTietoa(0); setVastaukset(0); setKaaviot(0);
             }}> {strings.tentit} 
-          </a> : 
-          <a className="s-nav-item" onClick={e => {      // kaikki TENTIT näkyviin (ei ole valittua kurssia)
+          </span> : 
+          <span className="s-nav-item" onClick={e => {      // kaikki TENTIT näkyviin (ei ole valittua kurssia)
               setTentit(1); setTietoa(0); setAktiivinenTentti(null); setAktiivinenKurssi(null); setKurssiDataIndex(null);
             }}> {strings.tentit} 
-        </a>}
-        <a className="s-nav-item" onClick={e => {
+        </span>}
+        <span className="s-nav-item" onClick={e => {
             setTentit(0); setKaaviot(0); setTietoa(1);      // näytetään TIETOA
           }}> {strings.tietoa}
-        </a>
-        <a className="s-nav-item" onClick={e => {        // vaihdetaan HALLINTA (päälle/pois)
+        </span>
+        <span className="s-nav-item" onClick={e => {        // vaihdetaan HALLINTA (päälle/pois)
             setHallinta(!hallinta)
           }}> <BuildIcon fontSize="small"/> 
-        </a>
-        <a className="s-nav-item-right" onClick={e => {  // POISTUTAAN
+        </span>
+        <span className="s-nav-item-right" onClick={e => {  // POISTUTAAN
             setTentit(0); setKaaviot(0); setLogin(false); setAktiivinenKayttaja(null); setAktiivinenKurssi(null);
             window.localStorage.removeItem('loggedAppUser');
             window.location.reload();
           }}> {strings.poistu} 
-        </a>
-        <a className="s-nav-item-right"> {kayttajaNimi} - </a>
+        </span>
+        <span className="s-nav-item-right"> {kayttajaNimi} - </span>
       </nav>
       <div className="dropzone" {...getRootProps()}>
         DROP ZONE       
@@ -276,16 +276,16 @@ function App() {
           <section className="tenttivalikko">
             <Tenttivalikko tenttiData={tenttiData} setTenttiData={setTenttiData} aktiivinenTentti={aktiivinenTentti} setAktiivinenTentti={setAktiivinenTentti} aktiivinenKurssi={aktiivinenKurssi} setAktiivinenKurssi={setAktiivinenKurssi} kurssiData={kurssiData} setKurssiDataIndex={setKurssiDataIndex} lang={lang} />
           </section> : aktiivinenKurssi !== null && tentit ?   // kurssi valittu, näytetään kurssin tentit
-            <div className="grid-item"> {strings.kurssi} <a className="kurssivalinta">{kurssiData[kurssiDataIndex].kurssi}</a>
+            <div className="grid-item"> {strings.kurssi} <span className="kurssivalinta">{kurssiData[kurssiDataIndex].kurssi}</span>
               <nav className="tenttivalikko">
                 {aktiivinenTentti === null ?              // ei ole vielä valittu kurssilta tenttiä
                   state.map((item, index) =>
-                    <a className="t-nav-item" key={item.tenttiid} onClick={() => {
+                    <span className="t-nav-item" key={item.tenttiid} onClick={() => {
                       setAktiivinenTentti(index); setVastaukset(0)
                     }}>{item.tentti}
-                    </a>)
+                    </span>)
                   : hallinta && aktiivinenTentti !== null ?  // hallintatila ja tentti kurssilta valittuna
-                    <a>
+                    <span>
                       {/* <input type="text" value={state[aktiivinenTentti].tentti} onChange={(event) =>{ */}
                       <input type="text" defaultValue={state[aktiivinenTentti].tentti} id={state[aktiivinenTentti].tenttiid} onBlur={(event) => {
                         var newText = document.getElementById(state[aktiivinenTentti].tenttiid);
@@ -298,11 +298,11 @@ function App() {
                         //   setAktiivinenTentti(null)}
                         setVahvista(true); setVahvistusOtsikko(strings.tpoisto); setVahvistusTeksti(`${strings.tvahvistus} (${state[aktiivinenTentti].tentti})?`); setVahvistusTehtava("poistaTenttiKurssilta"); setVahvistusPoisto(aktiivinenTentti); setAktiivinenTentti(null)
                       }}><DeleteTwoToneIcon /></button>
-                    </a> : state[aktiivinenTentti].tentti}
-                {hallinta && aktiivinenTentti === null ? <a className="add-item" onClick={() => { // lisätään uutta tenttiä kurssille
+                    </span> : state[aktiivinenTentti].tentti}
+                {hallinta && aktiivinenTentti === null ? <span className="add-item" onClick={() => { // lisätään uutta tenttiä kurssille
                   var uusiTenttiNimi = "uusi";
                   lisaaTentti(dispatch, uusiTenttiNimi, aktiivinenKurssi, aktiivinenKayttaja)
-                }}> + </a> : ""}
+                }}> + </span> : ""}
               </nav>
             </div>
             : tietoa ?
@@ -318,11 +318,11 @@ function App() {
     </section>
       : register ?
         <section className="grid-container">
-          <nav className="sovellusvalikko"><a className="s-nav-item">{strings.tervetuloa}</a><a className="s-nav-item-right">{versio}</a></nav>
+          <nav className="sovellusvalikko"><span className="s-nav-item">{strings.tervetuloa}</span><span className="s-nav-item-right">{versio}</span></nav>
           <Register luoTunnus={luoTunnus} register={register} setRegister={setRegister} />
         </section>
         : <section className="grid-container">
-          <nav className="sovellusvalikko"><a className="s-nav-item">{strings.tervetuloa}</a><a className="s-nav-item-right">{versio}</a></nav>
+          <nav className="sovellusvalikko"><span className="s-nav-item">{strings.tervetuloa}</span><span className="s-nav-item-right">{versio}</span></nav>
           <Login handleSubmit={tarkistaLogin} register={register} setRegister={setRegister} />
         </section>}
     </div>
