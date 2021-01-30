@@ -211,10 +211,10 @@ function App() {
       console.log(exception)
     }
   }
-
+  
   const luoTunnus = async (e, uusiKayttaja) => {
     e.preventDefault();
-
+  
     try {
       let kayttaja = await Axios.post(path + "register", uusiKayttaja)
       if (kayttaja.lenght === 0) {
@@ -227,37 +227,39 @@ function App() {
       console.log(exception)
     }
   }
+  
+  
 
   return (
     <div>{login ? <section className="grid-container">
       <nav className="sovellusvalikko">
-        <span className="s-nav-item" onClick={e => {        // kaikki KURSSIT näkyviin
+        <a className="s-nav-item" onClick={e => {        // kaikki KURSSIT näkyviin
             setTentit(0); setTietoa(0); setAktiivinenTentti(null); setAktiivinenKurssi(null); setKurssiDataIndex(null);
           }}> {strings.kurssit} 
-        </span> {kurssiDataIndex !== null ? 
-          <span className="s-nav-item" onClick={e => {      // valitun kurssin TENTIT näkyviin
+        </a> {kurssiDataIndex !== null ? 
+          <a className="s-nav-item" onClick={e => {      // valitun kurssin TENTIT näkyviin
               setAktiivinenTentti(null); setTentit(1); setTietoa(0); setVastaukset(0); setKaaviot(0);
             }}> {strings.tentit} 
-          </span> : 
-          <span className="s-nav-item" onClick={e => {      // kaikki TENTIT näkyviin (ei ole valittua kurssia)
+          </a> : 
+          <a className="s-nav-item" onClick={e => {      // kaikki TENTIT näkyviin (ei ole valittua kurssia)
               setTentit(1); setTietoa(0); setAktiivinenTentti(null); setAktiivinenKurssi(null); setKurssiDataIndex(null);
             }}> {strings.tentit} 
-        </span>}
-        <span className="s-nav-item" onClick={e => {
+        </a>}
+        <a className="s-nav-item" onClick={e => {
             setTentit(0); setKaaviot(0); setTietoa(1);      // näytetään TIETOA
           }}> {strings.tietoa}
-        </span>
-        <span className="s-nav-item" onClick={e => {        // vaihdetaan HALLINTA (päälle/pois)
+        </a>
+        <a className="s-nav-item" onClick={e => {        // vaihdetaan HALLINTA (päälle/pois)
             setHallinta(!hallinta)
           }}> <BuildIcon fontSize="small"/> 
-        </span>
-        <span className="s-nav-item-right" onClick={e => {  // POISTUTAAN
+        </a>
+        <a className="s-nav-item-right" onClick={e => {  // POISTUTAAN
             setTentit(0); setKaaviot(0); setLogin(false); setAktiivinenKayttaja(null); setAktiivinenKurssi(null);
             window.localStorage.removeItem('loggedAppUser');
             window.location.reload();
           }}> {strings.poistu} 
-        </span>
-        <span className="s-nav-item-right"> {kayttajaNimi} - </span>
+        </a>
+        <a className="s-nav-item-right"> {kayttajaNimi} - </a>
       </nav>
       <div className="dropzone" {...getRootProps()}>
         DROP ZONE       
@@ -274,16 +276,16 @@ function App() {
           <section className="tenttivalikko">
             <Tenttivalikko tenttiData={tenttiData} setTenttiData={setTenttiData} aktiivinenTentti={aktiivinenTentti} setAktiivinenTentti={setAktiivinenTentti} aktiivinenKurssi={aktiivinenKurssi} setAktiivinenKurssi={setAktiivinenKurssi} kurssiData={kurssiData} setKurssiDataIndex={setKurssiDataIndex} lang={lang} />
           </section> : aktiivinenKurssi !== null && tentit ?   // kurssi valittu, näytetään kurssin tentit
-            <div className="grid-item"> {strings.kurssi} <span className="kurssivalinta">{kurssiData[kurssiDataIndex].kurssi}</span>
+            <div className="grid-item"> {strings.kurssi} <a className="kurssivalinta">{kurssiData[kurssiDataIndex].kurssi}</a>
               <nav className="tenttivalikko">
                 {aktiivinenTentti === null ?              // ei ole vielä valittu kurssilta tenttiä
                   state.map((item, index) =>
-                    <span className="t-nav-item" key={item.tenttiid} onClick={() => {
+                    <a className="t-nav-item" key={item.tenttiid} onClick={() => {
                       setAktiivinenTentti(index); setVastaukset(0)
                     }}>{item.tentti}
-                    </span>)
+                    </a>)
                   : hallinta && aktiivinenTentti !== null ?  // hallintatila ja tentti kurssilta valittuna
-                    <span>
+                    <a>
                       {/* <input type="text" value={state[aktiivinenTentti].tentti} onChange={(event) =>{ */}
                       <input type="text" defaultValue={state[aktiivinenTentti].tentti} id={state[aktiivinenTentti].tenttiid} onBlur={(event) => {
                         var newText = document.getElementById(state[aktiivinenTentti].tenttiid);
@@ -296,11 +298,11 @@ function App() {
                         //   setAktiivinenTentti(null)}
                         setVahvista(true); setVahvistusOtsikko(strings.tpoisto); setVahvistusTeksti(`${strings.tvahvistus} (${state[aktiivinenTentti].tentti})?`); setVahvistusTehtava("poistaTenttiKurssilta"); setVahvistusPoisto(aktiivinenTentti); setAktiivinenTentti(null)
                       }}><DeleteTwoToneIcon /></button>
-                    </span> : state[aktiivinenTentti].tentti}
-                {hallinta && aktiivinenTentti === null ? <span className="add-item" onClick={() => { // lisätään uutta tenttiä kurssille
+                    </a> : state[aktiivinenTentti].tentti}
+                {hallinta && aktiivinenTentti === null ? <a className="add-item" onClick={() => { // lisätään uutta tenttiä kurssille
                   var uusiTenttiNimi = "uusi";
                   lisaaTentti(dispatch, uusiTenttiNimi, aktiivinenKurssi, aktiivinenKayttaja)
-                }}> + </span> : ""}
+                }}> + </a> : ""}
               </nav>
             </div>
             : tietoa ?
@@ -316,11 +318,11 @@ function App() {
     </section>
       : register ?
         <section className="grid-container">
-          <nav className="sovellusvalikko"><span className="s-nav-item">{strings.tervetuloa}</span><span className="s-nav-item-right">{versio}</span></nav>
+          <nav className="sovellusvalikko"><a className="s-nav-item">{strings.tervetuloa}</a><a className="s-nav-item-right">{versio}</a></nav>
           <Register luoTunnus={luoTunnus} register={register} setRegister={setRegister} />
         </section>
         : <section className="grid-container">
-          <nav className="sovellusvalikko"><span className="s-nav-item">{strings.tervetuloa}</span><span className="s-nav-item-right">{versio}</span></nav>
+          <nav className="sovellusvalikko"><a className="s-nav-item">{strings.tervetuloa}</a><a className="s-nav-item-right">{versio}</a></nav>
           <Login handleSubmit={tarkistaLogin} register={register} setRegister={setRegister} />
         </section>}
     </div>
