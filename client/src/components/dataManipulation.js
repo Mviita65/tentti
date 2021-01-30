@@ -1,5 +1,7 @@
 import Axios from 'axios';
 
+const lang = navigator.language
+
 var path = null
 switch (process.env.NODE_ENV) {
   case 'production':
@@ -14,6 +16,61 @@ switch (process.env.NODE_ENV) {
   default:
     throw new Error("Check environment settings")
 } 
+
+  const fetchKurssiData = async (kurssiData,setKurssiData) => {
+    try {
+      let kurssitiedot = []
+      let result = await Axios.get(path + "kurssi")
+      if (result.data.length > 0){
+        for (var i = 0; i < result.data.length; i++){
+          let kurssitieto = {
+            kurssiid : result.data[i].kurssiid,
+            kurssi : result.data[i].kurssi,
+            // aloituspvm : new Date(result.data[i].aloituspvm).toLocaleDateString()
+            aloituspvm : new Intl.DateTimeFormat(lang).format(new Date(result.data[i].aloituspvm))
+          }
+          kurssitiedot = kurssitiedot.concat(kurssitieto)
+        }
+        setKurssiData(kurssitiedot)
+        return
+      }
+    }
+    catch (exception) {
+      console.log(exception)
+    }
+  };
+
+  const fetchTenttiData = async (tenttiData,setTenttiData) => {
+    try {
+      let tenttitiedot = []
+      let result = await Axios.get(path + "tentti")
+      if (result.data.length > 0){
+        for (var i = 0; i < result.data.length; i++){
+          let tenttitieto = {
+            tenttiid : result.data[i].tenttiid,
+            tentti : result.data[i].tentti,
+            minimipisteet: result.data[i].minimipisteet,
+            julkaisupvm: new Intl.DateTimeFormat(lang).format(new Date(result.data[i].julkaisupvm)),
+            // julkaisupvm: new Date(result.data[i].julkaisupvm).toLocaleDateString(),
+            kurssiid: result.data[i].kurssiid,
+            kurssi: result.data[i].kurssi,
+            etunimi: result.data[i].etunimi,
+            sukunimi: result.data[i].sukunimi,
+            kayttajaid: result.data[i].kayttajaid,
+            sahkoposti: result.data[i].sahkoposti,
+            kysymykset: []
+          }
+          tenttitiedot = tenttitiedot.concat(tenttitieto)
+        }
+        setTenttiData(tenttitiedot)
+        return
+      }
+    }
+    catch (exception) {
+      console.log(exception)
+    }
+  };
+
 
   const muutaTentti = async(dispatch,event,data,aktiivinenTentti) => {
     let id = data.tenttiid
@@ -201,6 +258,8 @@ switch (process.env.NODE_ENV) {
   }
 
   export {
+    fetchKurssiData,
+    fetchTenttiData,
     muutaTentti,
     muutaKysymys,
     muutaVaihtoehtoTeksti,
