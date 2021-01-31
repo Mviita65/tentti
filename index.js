@@ -3,7 +3,7 @@ const express = require('express')
 var path = require('path')
 var bodyParser = require('body-parser')
 const app = express()
-const httpServer = require('http').createServer(app)  // tarvittiin webSocket ja tämä kuuntelemaan!
+const httpServer = require('http').createServer(app)  // tarvittiin webSocketissa ja tämä laitetaan kuuntelemaan!
 const port = process.env.PORT || 4000
 app.use(bodyParser.json())
 app.use(express.static('./client/build'))
@@ -196,7 +196,7 @@ app.get('/kurssi', (req, res, next) => {
   })
 })
 
-// haetaan tentit ja kurssit joilla tentti on sekä tentin ylläpitäjä
+// haetaan tentit ja kurssit joilla tentti on, sekä tentin ylläpitäjä
 app.get('/tentti', (req,res,next) => {
   req.params.ehto = "oppilas"
   db.query('SELECT tentti,tenttiid,minimipisteet,julkaisupvm,kurssi,kurssiid,etunimi,sukunimi,sahkoposti,kayttajaid FROM (((( tentti LEFT JOIN kurssitentti ON kurssi_tentti_id = tenttiid) LEFT JOIN kurssi ON kurssi_kurssi_id = kurssiid) LEFT JOIN tenttikasittelija ON tkasittelija_tentti_id = tenttiid) LEFT JOIN kayttaja ON tkasittelija_kayttaja_id = kayttajaid) ORDER BY tentti', (err, result) => {

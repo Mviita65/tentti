@@ -25,7 +25,7 @@ import { useSnackbar } from "notistack";
 
 function App() {
 
-  const versio = "ver. 0.55"
+  const versio = "ver. 0.65"
   const [dataAlustettu, setDataAlustettu] = useState(false)
   const [state, dispatch] = useReducer(reducer, [])
   const [tentit, setTentit] = useState(0)
@@ -281,11 +281,11 @@ function App() {
                 {aktiivinenTentti === null ?              // ei ole vielä valittu kurssilta tenttiä
                   state.map((item, index) =>
                     <span className="t-nav-item" key={item.tenttiid} onClick={() => {
-                      setAktiivinenTentti(index); setVastaukset(0)
-                    }}>{item.tentti}
+                        setAktiivinenTentti(index); setVastaukset(0)
+                      }}>{item.tentti}
                     </span>)
                   : hallinta && aktiivinenTentti !== null ?  // hallintatila ja tentti kurssilta valittuna
-                    <span>
+                    <span className="t-nav-item">
                       {/* <input type="text" value={state[aktiivinenTentti].tentti} onChange={(event) =>{ */}
                       <input type="text" defaultValue={state[aktiivinenTentti].tentti} id={state[aktiivinenTentti].tenttiid} onBlur={(event) => {
                         var newText = document.getElementById(state[aktiivinenTentti].tenttiid);
@@ -298,7 +298,10 @@ function App() {
                         //   setAktiivinenTentti(null)}
                         setVahvista(true); setVahvistusOtsikko(strings.tpoisto); setVahvistusTeksti(`${strings.tvahvistus} (${state[aktiivinenTentti].tentti})?`); setVahvistusTehtava("poistaTenttiKurssilta"); setVahvistusPoisto(aktiivinenTentti); setAktiivinenTentti(null)
                       }}><DeleteTwoToneIcon /></button>
-                    </span> : state[aktiivinenTentti].tentti}
+                    </span> : 
+                    <span className="t-nav-item" >
+                      {state[aktiivinenTentti].tentti}
+                    </span>}
                 {hallinta && aktiivinenTentti === null ? <span className="add-item" onClick={() => { // lisätään uutta tenttiä kurssille
                   var uusiTenttiNimi = "uusi";
                   lisaaTentti(dispatch, uusiTenttiNimi, aktiivinenKurssi, aktiivinenKayttaja)
