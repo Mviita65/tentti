@@ -48,6 +48,7 @@ function App() {
   const [vahvistusTeksti, setVahvistusTeksti] = useState("")
   const [vahvistusTehtava, setVahvistusTehtava] = useState("")
   const [vahvistusPoisto, setVahvistusPoisto] = useState("")
+  const [vahvistusPoisto2, setVahvistusPoisto2] = useState("")
   const lang = navigator.language
   const { enqueueSnackbar } = useSnackbar();
 
@@ -231,104 +232,123 @@ function App() {
   
 
   return (
-    <div>{login ? <section className="grid-container">
-      <nav className="sovellusvalikko">
-        <span className="s-nav-item" onClick={e => {        // kaikki KURSSIT näkyviin
-            setTentit(0); setTietoa(0); setAktiivinenTentti(null); setAktiivinenKurssi(null); setKurssiDataIndex(null);
-          }}> {strings.kurssit} 
-        </span> {kurssiDataIndex !== null ? 
-          <span className="s-nav-item" onClick={e => {      // valitun kurssin TENTIT näkyviin
-              setAktiivinenTentti(null); setTentit(1); setTietoa(0); setVastaukset(0); setKaaviot(0);
-            }}> {strings.tentit} 
-          </span> : 
-          <span className="s-nav-item" onClick={e => {      // kaikki TENTIT näkyviin (ei ole valittua kurssia)
-              setTentit(1); setTietoa(0); setAktiivinenTentti(null); setAktiivinenKurssi(null); setKurssiDataIndex(null);
-            }}> {strings.tentit} 
-        </span>}
-        <span className="s-nav-item" onClick={e => {
-            setTentit(0); setKaaviot(0); setTietoa(1);      // näytetään TIETOA
-          }}> {strings.tietoa}
-        </span>
-        <span className="s-nav-item" onClick={e => {        // vaihdetaan HALLINTA (päälle/pois)
-            setHallinta(!hallinta)
-          }}> <BuildIcon fontSize="small"/> 
-        </span>
-        <span className="s-nav-item-right" onClick={e => {  // POISTUTAAN
-            setTentit(0); setKaaviot(0); setLogin(false); setAktiivinenKayttaja(null); setAktiivinenKurssi(null);
-            window.localStorage.removeItem('loggedAppUser');
-            window.location.reload();
-          }}> {strings.poistu} 
-        </span>
-        <span className="s-nav-item-right"> {kayttajaNimi} - </span>
-      </nav>
-      <div className="dropzone" {...getRootProps()}>
-        DROP ZONE       
-        <input {...getInputProps()} />
-        {                                                   // DROPZONE
-          isDragActive ? "" : ""
-        }
-      </div>
-      {aktiivinenKurssi === null && !tentit ?               // kurssivalikko näkyviin, ei vielä valittua kurssia
-        <section className="tenttivalikko">
-          <Kurssivalikko aktiivinenKurssi={aktiivinenKurssi} setAktiivinenKurssi={setAktiivinenKurssi} kurssiData={kurssiData} setKurssiData={setKurssiData} tentit={tentit} setTentit={setTentit} kurssiDataIndex={kurssiDataIndex} setKurssiDataIndex={setKurssiDataIndex} lang={lang} />
-        </section>
-        : aktiivinenKurssi === null && tentit ?             // tenttivalikko näkyviin, ei ole valittua kurssia
+    <div>
+      {login ? <section className="grid-container">
+        <nav className="sovellusvalikko">
+          <span className="s-nav-item" onClick={e => {        // kaikki KURSSIT näkyviin
+              setTentit(0); setTietoa(0); setAktiivinenTentti(null); setAktiivinenKurssi(null); setKurssiDataIndex(null);
+            }}> {strings.kurssit} 
+          </span> 
+          {kurssiDataIndex !== null ? 
+            <span className="s-nav-item" onClick={e => {      // valitun kurssin TENTIT näkyviin
+                setAktiivinenTentti(null); setTentit(1); setTietoa(0); setVastaukset(0); setKaaviot(0);
+              }}> {strings.tentit} 
+            </span> : 
+            <span className="s-nav-item" onClick={e => {      // kaikki TENTIT näkyviin (ei ole valittua kurssia)
+                setTentit(1); setTietoa(0); setAktiivinenTentti(null); setAktiivinenKurssi(null); setKurssiDataIndex(null);
+              }}> {strings.tentit} 
+            </span>}
+          <span className="s-nav-item" onClick={e => {
+              setTentit(0); setKaaviot(0); setTietoa(1);      // näytetään TIETOA
+            }}> {strings.tietoa}
+          </span>
+          <span className="s-nav-item" onClick={e => {        // vaihdetaan HALLINTA (päälle/pois)
+              setHallinta(!hallinta)
+            }}> <BuildIcon fontSize="small"/> 
+          </span>
+          <span className="s-nav-item-right" onClick={e => {  // POISTUTAAN
+              setTentit(0); setKaaviot(0); setLogin(false); setAktiivinenKayttaja(null); setAktiivinenKurssi(null);
+              window.localStorage.removeItem('loggedAppUser');
+              window.location.reload();
+            }}> {strings.poistu} 
+          </span>
+          <span className="s-nav-item-right"> {kayttajaNimi} - </span>
+        </nav>
+        <div className="dropzone" {...getRootProps()}>
+          DROP ZONE       
+          <input {...getInputProps()} />
+          {                                                   // DROPZONE
+            isDragActive ? "" : ""
+          }
+        </div>
+        {aktiivinenKurssi === null && !tentit ?               // kurssivalikko näkyviin, ei vielä valittua kurssia
+          <section className="tenttivalikko">
+            <Kurssivalikko aktiivinenKurssi={aktiivinenKurssi} setAktiivinenKurssi={setAktiivinenKurssi} kurssiData={kurssiData} setKurssiData={setKurssiData} tentit={tentit} setTentit={setTentit} kurssiDataIndex={kurssiDataIndex} setKurssiDataIndex={setKurssiDataIndex} lang={lang} />
+          </section>
+        : aktiivinenKurssi === null && tentit ?               // tenttivalikko näkyviin, ei ole valittua kurssia
           <section className="tenttivalikko">
             <Tenttivalikko tenttiData={tenttiData} setTenttiData={setTenttiData} aktiivinenTentti={aktiivinenTentti} setAktiivinenTentti={setAktiivinenTentti} tentit={tentit} setTentit={setTentit} aktiivinenKurssi={aktiivinenKurssi} setAktiivinenKurssi={setAktiivinenKurssi} kurssiData={kurssiData} setKurssiDataIndex={setKurssiDataIndex} lang={lang} />
-          </section> : aktiivinenKurssi !== null && tentit ?   // kurssi valittu, näytetään kurssin tentit
-            <div className="grid-item"> {strings.kurssi} <span className="kurssivalinta">{kurssiData[kurssiDataIndex].kurssi}</span>
-              <nav className="tenttivalikko">
-                {aktiivinenTentti === null ?              // ei ole vielä valittu kurssilta tenttiä
-                  state.map((item, index) =>
-                    <span className="t-nav-item" key={item.tenttiid} onClick={() => {
-                        setAktiivinenTentti(index); setVastaukset(0)
-                      }}>{item.tentti}
-                    </span>)
-                  : hallinta && aktiivinenTentti !== null ?  // hallintatila ja tentti kurssilta valittuna
-                    <span className="t-nav-item">
-                      {/* <input type="text" value={state[aktiivinenTentti].tentti} onChange={(event) =>{ */}
-                      <input type="text" defaultValue={state[aktiivinenTentti].tentti} id={state[aktiivinenTentti].tenttiid} onBlur={(event) => {
-                        var newText = document.getElementById(state[aktiivinenTentti].tenttiid);
-                        newText.value = newText.value.toUpperCase();
-                        muutaTentti(dispatch, newText, state[aktiivinenTentti], aktiivinenTentti)
-                      }}>
-                      </input> <button className="delButton" onClick={() => {   // poistakurssinappulan toiminto
-                        // if (window.confirm("Poistetaanko tentti ("+state[aktiivinenTentti].tentti+") kurssilta?")){
-                        //   poistaTenttiKurssilta(dispatch,state[aktiivinenTentti],aktiivinenTentti,aktiivinenKurssi)
-                        //   setAktiivinenTentti(null)}
-                        setVahvista(true); setVahvistusOtsikko(strings.tpoisto); setVahvistusTeksti(`${strings.tvahvistus} (${state[aktiivinenTentti].tentti})?`); setVahvistusTehtava("poistaTenttiKurssilta"); setVahvistusPoisto(aktiivinenTentti); setAktiivinenTentti(null)
-                      }}><DeleteTwoToneIcon /></button>
-                    </span> : 
-                    <span className="t-nav-item" >
-                      {state[aktiivinenTentti].tentti}
-                    </span>}
-                {hallinta && aktiivinenTentti === null ? <span className="add-item" onClick={() => { // lisätään uutta tenttiä kurssille
+          </section>
+        : aktiivinenKurssi !== null && tentit ?               // kurssi valittu, näytetään kurssin tentit
+          <div className="grid-item"> {strings.kurssi} 
+            <span className="kurssivalinta">{kurssiData[kurssiDataIndex].kurssi}</span> {/* valitun kurssin nimi */}
+            <nav className="tenttivalikko">
+            {aktiivinenTentti === null ?                      // ei ole vielä valittu kurssilta tenttiä
+              state.map((item, index) =>                      // eli näytetään kurssin tentit valintaa varten
+                <span className="t-nav-item" key={item.tenttiid} onClick={() => {
+                   setAktiivinenTentti(index); setVastaukset(0)
+                  }}>{item.tentti}
+                </span>)
+            : hallinta && aktiivinenTentti !== null && !vahvista ?         // hallintatila ja tentti kurssilta valittuna
+              <span className="t-nav-item">
+                {/* <input type="text" value={state[aktiivinenTentti].tentti} onChange={(event) =>{ */}
+                <input type="text" defaultValue={state[aktiivinenTentti].tentti} id={state[aktiivinenTentti].tenttiid} onBlur={(event) => {
+                  var newText = document.getElementById(state[aktiivinenTentti].tenttiid);
+                  newText.value = newText.value.toUpperCase();
+                  muutaTentti(dispatch, newText, state[aktiivinenTentti], aktiivinenTentti)
+                }}>
+                </input> <button className="delButton" onClick={() => {   // poistakurssinappulan toiminto
+                   // if (window.confirm("Poistetaanko tentti ("+state[aktiivinenTentti].tentti+") kurssilta?")){
+                   //   poistaTenttiKurssilta(dispatch,state[aktiivinenTentti],aktiivinenTentti,aktiivinenKurssi)
+                   //   setAktiivinenTentti(null)}
+                   setVahvista(true); setVahvistusOtsikko(strings.tpoisto); setVahvistusTeksti(`${strings.tvahvistus} (${state[aktiivinenTentti].tentti})?`); setVahvistusTehtava("poistaTenttiKurssilta"); setVahvistusPoisto(aktiivinenTentti); setVahvistusPoisto2(aktiivinenKurssi);
+                  }}><DeleteTwoToneIcon />
+                </button>
+              </span> 
+            : // tentti on valittu ja näytetään vain valitun tentin nimi
+              <span className="t-nav-item" >
+                {state[aktiivinenTentti].tentti}
+              </span>}
+            {hallinta && aktiivinenTentti === null ?
+              <span className="add-item" onClick={() => { // lisätään uutta tenttiä kurssille
                   var uusiTenttiNimi = "uusi";
                   lisaaTentti(dispatch, uusiTenttiNimi, aktiivinenKurssi, aktiivinenKayttaja)
-                }}> + </span> : ""}
-              </nav>
-            </div>
-            : tietoa ?
-              <section className="vastaus">{window.open("https://www.youtube.com/watch?v=sAqnNWUD79Q", "_self")}</section> : ""}
-        {(aktiivinenTentti !== null && !tietoa && !kaaviot) ?
-         <Kysymykset dispatch={dispatch} data={state[aktiivinenTentti]} tenttiIndex={aktiivinenTentti} vastaukset={vastaukset} setVastaukset={setVastaukset} hallinta={hallinta} setHallinta={setHallinta} kaaviot={kaaviot} setKaaviot={setKaaviot} setVahvista={setVahvista} vahvista={vahvista} setVahvistusOtsikko={setVahvistusOtsikko} vahvistusOtsikko={vahvistusOtsikko} setVahvistusTeksti={setVahvistusTeksti} vahvistusTeksti={vahvistusTeksti} setVahvistusTehtava={setVahvistusTehtava} vahvistusTehtava={vahvistusTehtava} setVahvistusPoisto={setVahvistusPoisto} vahvistusPoisto={vahvistusPoisto} />
+                }}> + 
+              </span>
+            : ""}
+            </nav>
+          </div>
+        : tietoa ?
+          <section className="vastaus">{window.open("https://www.youtube.com/watch?v=sAqnNWUD79Q", "_self")}</section>
+        : ""}
+        {aktiivinenTentti !== null && !tietoa && !kaaviot && !vahvista?
+         <Kysymykset dispatch={dispatch} data={state[aktiivinenTentti]} tenttiIndex={aktiivinenTentti} vastaukset={vastaukset} setVastaukset={setVastaukset} hallinta={hallinta} setHallinta={setHallinta} kaaviot={kaaviot} setKaaviot={setKaaviot} setVahvista={setVahvista} vahvista={vahvista} setVahvistusOtsikko={setVahvistusOtsikko} vahvistusOtsikko={vahvistusOtsikko} setVahvistusTeksti={setVahvistusTeksti} vahvistusTeksti={vahvistusTeksti} setVahvistusTehtava={setVahvistusTehtava} vahvistusTehtava={vahvistusTehtava} setVahvistusPoisto={setVahvistusPoisto} vahvistusPoisto={vahvistusPoisto} setVahvistusPoisto2={setVahvistusPoisto2} vahvistusPoisto2={vahvistusPoisto2}/>
+        : vahvista ? 
+          <ConfirmDialog aktiivinenTentti={aktiivinenTentti} setAktiivinenTentti={setAktiivinenTentti} otsikko={vahvistusOtsikko} teksti={vahvistusTeksti} vahvista={vahvista} setVahvista={setVahvista} onConfirmAction={vahvistusTehtava} dispatch={dispatch} data={state[aktiivinenTentti]} index={vahvistusPoisto} index2={vahvistusPoisto2} />
         : kaaviot ?
           <section className="charts">
             <ChartExample otsikot={strings.gotsikot} tiedot={[5, 22, 10, 10]} tyyppi={strings.jakauma} valinta={"Doughnut"} />
             <ChartExample otsikot={strings.gotsikot} tiedot={[5, 22, 10, 10]} tyyppi={strings.aluepisteet} valinta={"Bar"} />
             <button className="button" onClick={() => { setKaaviot(0) }}>{strings.paluu}</button>
-          </section> : vahvista ? <ConfirmDialog otsikko={vahvistusOtsikko} teksti={vahvistusTeksti} vahvista={vahvista} setVahvista={setVahvista} onConfirmAction={vahvistusTehtava} dispatch={dispatch} data={state[vahvistusPoisto]} index={vahvistusPoisto} index2={aktiivinenKurssi} /> :""}
-    </section>
-      : register ?
-        <section className="grid-container">
-          <nav className="sovellusvalikko"><span className="s-nav-item">{strings.tervetuloa}</span><span className="s-nav-item-right">{versio}</span></nav>
-          <Register luoTunnus={luoTunnus} register={register} setRegister={setRegister} />
-        </section>
-        : <section className="grid-container">
-          <nav className="sovellusvalikko"><span className="s-nav-item">{strings.tervetuloa}</span><span className="s-nav-item-right">{versio}</span></nav>
-          <Login handleSubmit={tarkistaLogin} register={register} setRegister={setRegister} />
-        </section>}
-    </div>
-  )
+          </section>  
+        :""}
+      </section>
+    : register ?
+      <section className="grid-container">
+        <nav className="sovellusvalikko">
+          <span className="s-nav-item">{strings.tervetuloa}</span>
+          <span className="s-nav-item-right">{versio}</span>
+        </nav>
+        <Register luoTunnus={luoTunnus} register={register} setRegister={setRegister} />
+      </section>
+    : 
+      <section className="grid-container">
+        <nav className="sovellusvalikko">
+          <span className="s-nav-item">{strings.tervetuloa}</span>
+          <span className="s-nav-item-right">{versio}</span>
+        </nav>
+        <Login handleSubmit={tarkistaLogin} register={register} setRegister={setRegister} />
+      </section>}
+  </div>)
 }
 export default App;

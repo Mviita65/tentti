@@ -14,7 +14,7 @@ import strings from './merkkijonot';
 
 
 const ConfirmDialog = (props) => {
-  const { otsikko, teksti, vahvista, setVahvista, onConfirmAction, dispatch, data, index, index2 } = props;
+  const {aktiivinenTentti, setAktiivinenTentti, otsikko, teksti, vahvista, setVahvista, onConfirmAction, dispatch, data, index, index2 } = props;
   return (
     <Dialog
       open={vahvista}
@@ -31,14 +31,15 @@ const ConfirmDialog = (props) => {
             switch (onConfirmAction) {
               case "poistaTenttiKurssilta" :  
                 poistaTenttiKurssilta(dispatch, data, index, index2)
+                setAktiivinenTentti(null)
                 setVahvista(false)
                 return
               case "poistaKysymysTentilta" :
-                poistaKysymysTentilta(props, index)
+                poistaKysymysTentilta(dispatch, data, index, aktiivinenTentti)
                 setVahvista(false)
                 return
               case "poistaVaihtoehto" :
-                poistaVaihtoehto(props, index)
+                poistaVaihtoehto(dispatch, data, index, index2, aktiivinenTentti)
                 setVahvista(false)
                 return
               default : throw new Error();

@@ -224,34 +224,35 @@ switch (process.env.NODE_ENV) {
     }
   }
 
-  const poistaTenttiKurssilta = async(dispatch,data,index,kurssiid) => {
+  const poistaTenttiKurssilta = async(dispatch, data, index, kurssiid) => {
     let tenttiid = data.tenttiid
     try {
       let result = await Axios.delete(path + "kurssitentti/"+tenttiid+"/kurssi/"+kurssiid)
-      dispatch({type: "TENTTI_POISTETTU", data:{ tenttiIndex: index} })
+      dispatch({type: "TENTTI_POISTETTU", 
+        data:{ tenttiIndex: index} })
     } catch (exception) {
       console.log(exception)
     }
   }  
 
-  const poistaKysymysTentilta = async(props,kysymysIndex) => {
-    let kysymysid = props.data.kysymykset[kysymysIndex].kysymysid
-    let tenttiid = props.data.tenttiid
+  const poistaKysymysTentilta = async(dispatch, data, kysymysIndex, aktiivinenTentti) => {
+    let kysymysid = data.kysymykset[kysymysIndex].kysymysid
+    let tenttiid = data.tenttiid
     try {
       let result = await Axios.delete(path + "tenttikysymys/"+kysymysid+"/tentti/"+tenttiid)
-      props.dispatch({type: "KYSYMYS_POISTETTU", 
-        data:{ tenttiIndex: props.tenttiIndex, kyIndex: kysymysIndex } })
+      dispatch({type: "KYSYMYS_POISTETTU", 
+        data:{ tenttiIndex: aktiivinenTentti, kyIndex: kysymysIndex } })
     } catch (exception) {
       console.log(exception)
     }
   }
 
-  const poistaVaihtoehto = async(props,veIndex) => {
-    let id = props.data.vaihtoehdot[veIndex].vaihtoehtoid
+  const poistaVaihtoehto = async(dispatch, data, veIndex, kysymysIndex, aktiivinenTentti) => {
+    let id = data.kysymykset[kysymysIndex].vaihtoehdot[veIndex].vaihtoehtoid
     try {
       let result = await Axios.delete(path + "vaihtoehto/"+id)
-      props.dispatch({type: "VAIHTOEHTO_POISTETTU", 
-        data:{ tenttiIndex: props.tenttiIndex, kyIndex: props.kysymysIndex, veIndex: veIndex }})
+      dispatch({type: "VAIHTOEHTO_POISTETTU", 
+        data:{ tenttiIndex: aktiivinenTentti, kyIndex: kysymysIndex, veIndex: veIndex }})
     } catch (exception) {
       console.log(exception)
     }

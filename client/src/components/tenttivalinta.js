@@ -16,6 +16,7 @@ const Tenttivalikko = ({tenttiData,setTenttiData,setAktiivinenTentti,aktiivinenT
             <div key={index} className="kysymys">
                 <span className="t-nav-item" onClick={() =>{
                   setAktiivinenKurssi(item.kurssiid)
+                  
                   for (let i=0; i < kurssiData.length; i++){
                     if (kurssiData[i].kurssiid === item.kurssiid){
                       setKurssiDataIndex(i)
