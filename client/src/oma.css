@@ -10,14 +10,13 @@ body {
   background-color:#fafafa;
 }
 
-.grid-subContainer {
+/*  */
+.grid-subContainer { 
   height: 100vh;
   width: 100vw;
   grid-column-start: 2;
   grid-column-end: 3;
   display: grid;
-  grid-template-columns: 100%;
-  grid-template-rows: 5%, 95%;
 }
 
 .otsikko {
@@ -39,6 +38,7 @@ body {
 .grid-item2 {
   display: grid;
   grid-template-columns: 100%;
+  grid-template-rows: 5%, 95%;
   overflow: hidden;
 }
 
