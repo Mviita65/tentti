@@ -17,7 +17,57 @@ switch (process.env.NODE_ENV) {
     throw new Error("Check environment settings")
 } 
 
-  const fetchKurssiData = async (kurssiData,setKurssiData) => {
+const fetchKurssinData = async (dispatch,aktiivinenKurssi,aktiivinenKayttaja,path) => { // hakee yhden kurssin tenttien tiedot ja yhden käyttäjän antamat vastaukset kurssin tenttien kysymyksiin
+  if (aktiivinenKurssi !== null) {
+    try {
+      // let result = await Axios.get("http://localhost:3001/tentit/")
+      let kurssiid = aktiivinenKurssi
+      let kayttajaid = aktiivinenKayttaja // oppilas eli vastaukset yhdeltä oppilaalta
+      let result = await Axios.get(path + "kurssi/" + kurssiid)
+      if (result.data.length > 0) {
+        for (var i = 0; i < result.data.length; i++) {       // käydään läpi noudetun kurssin tentit
+          result.data[i].kysymykset = []
+          let kysymykset = await Axios.get(path + "kysymys/tentti/" + result.data[i].tenttiid)
+          result.data[i].kysymykset = kysymykset.data
+          if (result.data[i].kysymykset.length > 0) {
+            for (var j = 0; j < result.data[i].kysymykset.length; j++) { // käydään läpi noudetut tentin kysymykset
+              result.data[i].kysymykset[j].vaihtoehdot = []
+              let vaihtoehdot = await Axios.get(path + "vaihtoehto/kysymys/" + result.data[i].kysymykset[j].kysymysid)
+              result.data[i].kysymykset[j].vaihtoehdot = vaihtoehdot.data
+              let vastaukset = await Axios.get(path + "kayttaja/" + kayttajaid + "/kysymys/" + result.data[i].kysymykset[j].kysymysid)
+              if (result.data[i].kysymykset[j].vaihtoehdot.length > 0) {
+                for (var k = 0; k < result.data[i].kysymykset[j].vaihtoehdot.length; k++) {  // käydään läpi noudetut kysymyksen vaihtoehdot
+                  result.data[i].kysymykset[j].vaihtoehdot[k].valittu = false               // käyttäjän vastaukset alustetaan falsella
+                  if (vastaukset.data.length > 0) {
+                    for (var l = 0; l < vastaukset.data.length; l++) {                       // käydään läpi onko käyttäjä valinnut vaihtoehdon oikeaksi
+                      if (result.data[i].kysymykset[j].vaihtoehdot[k].vaihtoehtoid === vastaukset.data[l].vastaus_vaihtoehto_id) {
+                        result.data[i].kysymykset[j].vaihtoehdot[k].valittu = true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+        console.log(result.data)
+        dispatch({ type: "INIT_DATA", data: result.data })
+        // setDataAlustettu(true)
+      } else {
+        result.data = []
+        dispatch({ type: "INIT_DATA", data: result.data })
+        throw new Error("Nyt pitää data kyllä alustaa!")
+      }
+    }
+    catch (execption) {
+      console.log(execption)
+      // createData()
+    }
+
+  }
+}
+
+  const fetchKurssit = async (kurssiData,setKurssiData) => {
     try {
       let kurssitiedot = []
       let result = await Axios.get(path + "kurssi")
@@ -40,7 +90,7 @@ switch (process.env.NODE_ENV) {
     }
   };
 
-  const fetchTenttiData = async (tenttiData,setTenttiData) => {
+  const fetchTentit = async (tenttiData,setTenttiData) => {
     try {
       let tenttitiedot = []
       let result = await Axios.get(path + "tentti")
@@ -259,8 +309,10 @@ switch (process.env.NODE_ENV) {
   }
 
   export {
-    fetchKurssiData,
-    fetchTenttiData,
+
+    fetchKurssinData,
+    fetchKurssit,
+    fetchTentit,
     muutaTentti,
     muutaKysymys,
     muutaVaihtoehtoTeksti,

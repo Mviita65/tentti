@@ -1,3 +1,7 @@
+body {
+  overflow: hidden;
+}
+
 .grid-container {
   display: grid;
   grid-template-columns: 15% 70% 15%;
@@ -6,8 +10,25 @@
   background-color:#fafafa;
 }
 
+.grid-subContainer {
+  height: 100vh;
+  width: 100vw;
+  grid-column-start: 2;
+  grid-column-end: 3;
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: 5%, 95%;
+}
+
+.otsikko {
+  padding: 0.5em;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 400;
+  color:#3f51b5;
+}
+
 .grid-item {
-  padding:0.5em;
+  padding: 0.5em;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   font-weight: 400;
   color:#3f51b5;
@@ -15,6 +36,18 @@
   grid-column-end: 3;
 }
 
+.grid-item2 {
+  display: grid;
+  grid-template-columns: 100%;
+  overflow: hidden;
+}
+
+.content {
+  overflow-y: auto;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 400;
+  color:#3f51b5;
+}
 
 nav {
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
@@ -40,7 +73,7 @@ section {
   color: rgb(211, 208, 208);
 }
 
-.sovellusvalikko {
+.sovellusvalikko { 
   background-color:#3f51b5;
   vertical-align: middle;
   color: #fafafa;
@@ -73,6 +106,7 @@ section {
 }
 
 .kysymys {
+  overflow: hidden;
   font-weight: bold;
   background-color: white;
   padding: 0.75rem;

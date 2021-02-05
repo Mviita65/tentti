@@ -15,14 +15,18 @@ function Vaihtoehdot(props) { // näytölle kysymysten vaihtoehdot ja reagointi 
         {props.hallinta ? props.data.vaihtoehdot.map((item, veIndex) =>           // jos hallinta valittu
           <div key={item.vaihtoehtoid} className="vastaus">
             <input type="checkbox" checked={item.korrekti} onChange={(event) => { // voidaan muuttaa mikä on oikea vaihtoehto
-                muutaVaihtoehtoArvo(event,props,veIndex)}}></input>
-            {/* <input type="text" value={item.vaihtoehto} onChange={(event) =>{          // voidaan muotoilla vaihtoehdon tekstiä */}
+                muutaVaihtoehtoArvo(event,props,veIndex)}}></input>           {/* // voidaan muotoilla vaihtoehdon tekstiä */}
              <input type="text" defaultValue={item.vaihtoehto} id={item.vaihtoehtoid} onBlur={(event) => {
               var newText = document.getElementById(item.vaihtoehtoid);
               muutaVaihtoehtoTeksti(newText, props, veIndex);
             }}> 
             </input> <button className="delButton" onClick={()=>{
-              props.setVahvistusOtsikko(strings.vpoisto);props.setVahvistusTeksti(`${strings.vvahvistus} (${props.data.vaihtoehdot[veIndex].vaihtoehto})?`);props.setVahvistusTehtava("poistaVaihtoehto");props.setVahvistusPoisto(veIndex); props.setVahvistusPoisto2(props.kysymysIndex);props.setVahvista(true);
+                        props.setVahvistusOtsikko(strings.vpoisto);
+                        props.setVahvistusTeksti(`${strings.vvahvistus} (${props.data.vaihtoehdot[veIndex].vaihtoehto})?`);
+                        props.setVahvistusTehtava("poistaVaihtoehto");
+                        props.setVahvistusPoisto(veIndex); 
+                        props.setVahvistusPoisto2(props.kysymysIndex);
+                        props.setVahvista(true);
             }}><DeleteTwoToneIcon /></button> {!props.hallinta && item.valittu && item.korrekti ? <img alt="cathead" src={cathead}/> : ""}
           </div>): 
           props.vastaukset ? props.data.vaihtoehdot.map((item, veIndex) =>        // oikeiden vastausten näyttö valittu: valintoja ei voi muuttaa 

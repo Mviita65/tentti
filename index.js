@@ -90,7 +90,7 @@ app.post('/register',(req, res, next) => {
       return next(err)
     }
       if(result.rows.length > 0){
-        return res.status(401).json({ error: 'Tunnus varattu' })
+        return res.status(401).json({ error: 'Rekisteröintivirhe' })
       }
       bcrypt.hash(body.password, SALT_ROUNDS) 
       .then((passwordHash) => {
@@ -139,7 +139,6 @@ app.post('/login', (req, res, next) => {
           const userForToken = {
             username: tempUser.sahkoposti,
             id: tempUser.kayttajaid,
-            rights: tempUser.rooli
           }
           const token = jwt.sign(userForToken, 'tenttiJ') // Token lähtee tässä
             res.status(200).send({token, id: tempUser.kayttajaid, etunimi: tempUser.etunimi, sukunimi: tempUser.sukunimi})

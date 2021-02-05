@@ -9,6 +9,7 @@ import Axios from 'axios'
 import Login from './components/login'
 import Register from './components/register'
 import {
+  fetchKurssinData,
   muutaTentti,
   lisaaTentti,
 } from './components/dataManipulation.js';
@@ -70,70 +71,21 @@ function App() {
       throw new Error("Check environment settings")
   }
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    // const createData = async () => {
-    //   try {
-    //     let result = await Axios.post("http://localhost:3001/tentit/",initialData)
-    //     dispatch({type: "INIT_DATA", data: initialData})
-    //     setDataAlustettu(true)
-    //   } catch (exception) {
-    //     alert("Tietokannan alustaminen epäonnistui!")
-    //   }
-    // }
+  //   // const createData = async () => {
+  //   //   try {
+  //   //     let result = await Axios.post("http://localhost:3001/tentit/",initialData)
+  //   //     dispatch({type: "INIT_DATA", data: initialData})
+  //   //     setDataAlustettu(true)
+  //   //   } catch (exception) {
+  //   //     alert("Tietokannan alustaminen epäonnistui!")
+  //   //   }
+  //   // }
+ 
+  //   fetchKurssinData(dispatch,aktiivinenKayttaja,aktiivinenKurssi,path);
 
-    const fetchKurssiData = async () => { // hakee yhden kurssin tenttien tiedot ja yhden käyttäjän antamat vastaukset kurssin tenttien kysymyksiin
-      if (aktiivinenKurssi !== null) {
-        try {
-          // let result = await Axios.get("http://localhost:3001/tentit/")
-          let kurssiid = aktiivinenKurssi
-          let kayttajaid = aktiivinenKayttaja // oppilas eli vastaukset yhdeltä oppilaalta
-          let result = await Axios.get(path + "kurssi/" + kurssiid)
-          if (result.data.length > 0) {
-            for (var i = 0; i < result.data.length; i++) {       // käydään läpi noudetun kurssin tentit
-              result.data[i].kysymykset = []
-              let kysymykset = await Axios.get(path + "kysymys/tentti/" + result.data[i].tenttiid)
-              result.data[i].kysymykset = kysymykset.data
-              if (result.data[i].kysymykset.length > 0) {
-                for (var j = 0; j < result.data[i].kysymykset.length; j++) { // käydään läpi noudetut tentin kysymykset
-                  result.data[i].kysymykset[j].vaihtoehdot = []
-                  let vaihtoehdot = await Axios.get(path + "vaihtoehto/kysymys/" + result.data[i].kysymykset[j].kysymysid)
-                  result.data[i].kysymykset[j].vaihtoehdot = vaihtoehdot.data
-                  let vastaukset = await Axios.get(path + "kayttaja/" + kayttajaid + "/kysymys/" + result.data[i].kysymykset[j].kysymysid)
-                  if (result.data[i].kysymykset[j].vaihtoehdot.length > 0) {
-                    for (var k = 0; k < result.data[i].kysymykset[j].vaihtoehdot.length; k++) {  // käydään läpi noudetut kysymyksen vaihtoehdot
-                      result.data[i].kysymykset[j].vaihtoehdot[k].valittu = false               // käyttäjän vastaukset alustetaan falsella
-                      if (vastaukset.data.length > 0) {
-                        for (var l = 0; l < vastaukset.data.length; l++) {                       // käydään läpi onko käyttäjä valinnut vaihtoehdon oikeaksi
-                          if (result.data[i].kysymykset[j].vaihtoehdot[k].vaihtoehtoid === vastaukset.data[l].vastaus_vaihtoehto_id) {
-                            result.data[i].kysymykset[j].vaihtoehdot[k].valittu = true
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-            console.log(result.data)
-            dispatch({ type: "INIT_DATA", data: result.data })
-            setDataAlustettu(true)
-          } else {
-            result.data = []
-            dispatch({ type: "INIT_DATA", data: result.data })
-            throw new Error("Nyt pitää data kyllä alustaa!")
-          }
-        }
-        catch (execption) {
-          console.log(execption)
-          // createData()
-        }
-
-      }
-    }
-
-    fetchKurssiData();
-  }, [aktiivinenKayttaja, aktiivinenKurssi])
+  // }, [aktiivinenKurssi])
 
   // useEffect(() => {
 
@@ -273,11 +225,29 @@ function App() {
         </div>
         {aktiivinenKurssi === null && !tentit ?               // kurssivalikko näkyviin, ei vielä valittua kurssia
           <section className="tenttivalikko">
-            <Kurssivalikko aktiivinenKurssi={aktiivinenKurssi} setAktiivinenKurssi={setAktiivinenKurssi} kurssiData={kurssiData} setKurssiData={setKurssiData} tentit={tentit} setTentit={setTentit} kurssiDataIndex={kurssiDataIndex} setKurssiDataIndex={setKurssiDataIndex} lang={lang} />
+            <Kurssivalikko 
+                path={path}
+                dispatch={dispatch}
+                aktiivinenKayttaja={aktiivinenKayttaja}
+                aktiivinenKurssi={aktiivinenKurssi} setAktiivinenKurssi={setAktiivinenKurssi}
+                kurssiData={kurssiData} setKurssiData={setKurssiData} 
+                tentit={tentit} setTentit={setTentit} 
+                kurssiDataIndex={kurssiDataIndex} setKurssiDataIndex={setKurssiDataIndex} 
+                lang={lang} />
           </section>
         : aktiivinenKurssi === null && tentit ?               // tenttivalikko näkyviin, ei ole valittua kurssia
           <section className="tenttivalikko">
-            <Tenttivalikko tenttiData={tenttiData} setTenttiData={setTenttiData} aktiivinenTentti={aktiivinenTentti} setAktiivinenTentti={setAktiivinenTentti} tentit={tentit} setTentit={setTentit} aktiivinenKurssi={aktiivinenKurssi} setAktiivinenKurssi={setAktiivinenKurssi} kurssiData={kurssiData} setKurssiDataIndex={setKurssiDataIndex} lang={lang} />
+            <Tenttivalikko 
+                path={path}
+                dispatch={dispatch}
+                aktiivinenKayttaja={aktiivinenKayttaja}
+                tenttiData={tenttiData} setTenttiData={setTenttiData} 
+                aktiivinenTentti={aktiivinenTentti} setAktiivinenTentti={setAktiivinenTentti} 
+                tentit={tentit} setTentit={setTentit} 
+                aktiivinenKurssi={aktiivinenKurssi} setAktiivinenKurssi={setAktiivinenKurssi} 
+                kurssiData={kurssiData} 
+                setKurssiDataIndex={setKurssiDataIndex} 
+                lang={lang} />
           </section>
         : aktiivinenKurssi !== null && tentit ?               // kurssi valittu, näytetään kurssin tentit
           <div className="grid-item"> {strings.kurssi} 
@@ -298,10 +268,12 @@ function App() {
                   muutaTentti(dispatch, newText, state[aktiivinenTentti], aktiivinenTentti)
                 }}>
                 </input> <button className="delButton" onClick={() => {   // poistakurssinappulan toiminto
-                   // if (window.confirm("Poistetaanko tentti ("+state[aktiivinenTentti].tentti+") kurssilta?")){
-                   //   poistaTenttiKurssilta(dispatch,state[aktiivinenTentti],aktiivinenTentti,aktiivinenKurssi)
-                   //   setAktiivinenTentti(null)}
-                   setVahvista(true); setVahvistusOtsikko(strings.tpoisto); setVahvistusTeksti(`${strings.tvahvistus} (${state[aktiivinenTentti].tentti})?`); setVahvistusTehtava("poistaTenttiKurssilta"); setVahvistusPoisto(aktiivinenTentti); setVahvistusPoisto2(aktiivinenKurssi);
+                            setVahvistusOtsikko(strings.tpoisto); 
+                            setVahvistusTeksti(`${strings.tvahvistus} (${state[aktiivinenTentti].tentti})?`); 
+                            setVahvistusTehtava("poistaTenttiKurssilta"); 
+                            setVahvistusPoisto(aktiivinenTentti); 
+                            setVahvistusPoisto2(aktiivinenKurssi); 
+                            setVahvista(true); 
                   }}><DeleteTwoToneIcon />
                 </button>
               </span> 
@@ -322,9 +294,20 @@ function App() {
           <section className="vastaus">{window.open("https://www.youtube.com/watch?v=sAqnNWUD79Q", "_self")}</section>
         : ""}
         {aktiivinenTentti !== null && !tietoa && !kaaviot && !vahvista?
-         <Kysymykset dispatch={dispatch} data={state[aktiivinenTentti]} tenttiIndex={aktiivinenTentti} vastaukset={vastaukset} setVastaukset={setVastaukset} hallinta={hallinta} setHallinta={setHallinta} kaaviot={kaaviot} setKaaviot={setKaaviot} setVahvista={setVahvista} vahvista={vahvista} setVahvistusOtsikko={setVahvistusOtsikko} vahvistusOtsikko={vahvistusOtsikko} setVahvistusTeksti={setVahvistusTeksti} vahvistusTeksti={vahvistusTeksti} setVahvistusTehtava={setVahvistusTehtava} vahvistusTehtava={vahvistusTehtava} setVahvistusPoisto={setVahvistusPoisto} vahvistusPoisto={vahvistusPoisto} setVahvistusPoisto2={setVahvistusPoisto2} vahvistusPoisto2={vahvistusPoisto2}/>
+         <Kysymykset dispatch={dispatch} data={state[aktiivinenTentti]} tenttiIndex={aktiivinenTentti}
+            vastaukset={vastaukset} setVastaukset={setVastaukset} hallinta={hallinta} setHallinta={setHallinta} 
+            kaaviot={kaaviot} setKaaviot={setKaaviot} setVahvista={setVahvista} vahvista={vahvista} 
+            setVahvistusOtsikko={setVahvistusOtsikko} vahvistusOtsikko={vahvistusOtsikko} 
+            setVahvistusTeksti={setVahvistusTeksti} vahvistusTeksti={vahvistusTeksti} 
+            setVahvistusTehtava={setVahvistusTehtava} vahvistusTehtava={vahvistusTehtava} 
+            setVahvistusPoisto={setVahvistusPoisto} vahvistusPoisto={vahvistusPoisto} 
+            setVahvistusPoisto2={setVahvistusPoisto2} vahvistusPoisto2={vahvistusPoisto2}/>
         : vahvista ? 
-          <ConfirmDialog aktiivinenTentti={aktiivinenTentti} setAktiivinenTentti={setAktiivinenTentti} otsikko={vahvistusOtsikko} teksti={vahvistusTeksti} vahvista={vahvista} setVahvista={setVahvista} onConfirmAction={vahvistusTehtava} dispatch={dispatch} data={state[aktiivinenTentti]} index={vahvistusPoisto} index2={vahvistusPoisto2} />
+          <ConfirmDialog aktiivinenTentti={aktiivinenTentti} setAktiivinenTentti={setAktiivinenTentti}
+              otsikko={vahvistusOtsikko} teksti={vahvistusTeksti} 
+              vahvista={vahvista} setVahvista={setVahvista} 
+              onConfirmAction={vahvistusTehtava} dispatch={dispatch} 
+              data={state[aktiivinenTentti]} index={vahvistusPoisto} index2={vahvistusPoisto2} />
         : kaaviot ?
           <section className="charts">
             <ChartExample otsikot={strings.gotsikot} tiedot={[5, 22, 10, 10]} tyyppi={strings.jakauma} valinta={"Doughnut"} />
@@ -333,6 +316,7 @@ function App() {
           </section>  
         :""}
       </section>
+
     : register ?
       <section className="grid-container">
         <nav className="sovellusvalikko">
