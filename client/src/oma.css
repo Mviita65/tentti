@@ -12,7 +12,7 @@ body {
 
 /*  */
 .grid-subContainer { 
-  height: 90vh;
+  height: 85vh;
   width: 100vw;
   grid-column-start: 2;
   grid-column-end: 3;
