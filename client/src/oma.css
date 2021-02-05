@@ -13,12 +13,13 @@ body {
 /*  */
 .grid-subContainer { 
   height: 85vh;
-  width: 100vw;
+  width: 85vw;
   grid-column-start: 2;
   grid-column-end: 3;
   display: grid;
   grid-template-columns: 100%;
   grid-template-rows: 5%, 95%;
+  align-content: start;
 }
 
 .otsikko {
@@ -43,7 +44,7 @@ body {
   overflow: hidden;
 }
 
-.content {
+.content { 
   overflow-y: scroll;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   font-weight: 400;

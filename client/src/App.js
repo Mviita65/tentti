@@ -223,7 +223,9 @@ function App() {
             isDragActive ? "" : ""
           }
         </div>
-        {aktiivinenKurssi === null && !tentit ?               // kurssivalikko näkyviin, ei vielä valittua kurssia
+        {tietoa ?
+          <section className="vastaus">{window.open("https://www.youtube.com/watch?v=sAqnNWUD79Q", "_self")}</section>
+        :aktiivinenKurssi === null && !tentit ?               // kurssivalikko näkyviin, ei vielä valittua kurssia
           <section className="tenttivalikko">
             <Kurssivalikko 
                 path={path}
@@ -237,87 +239,110 @@ function App() {
           </section>
         : aktiivinenKurssi === null && tentit ?               // tenttivalikko näkyviin, ei ole valittua kurssia
           <section className="tenttivalikko">
-            <Tenttivalikko 
-                path={path}
-                dispatch={dispatch}
-                aktiivinenKayttaja={aktiivinenKayttaja}
-                tenttiData={tenttiData} setTenttiData={setTenttiData} 
-                aktiivinenTentti={aktiivinenTentti} setAktiivinenTentti={setAktiivinenTentti} 
-                tentit={tentit} setTentit={setTentit} 
-                aktiivinenKurssi={aktiivinenKurssi} setAktiivinenKurssi={setAktiivinenKurssi} 
-                kurssiData={kurssiData} 
-                setKurssiDataIndex={setKurssiDataIndex} 
-                lang={lang} />
+            <div className="grid-subContainer">
+              <div className="otsikko">
+                {strings.tenttivalinta}
+              </div>
+              <div className="grid-item2">
+                <Tenttivalikko 
+                  path={path}
+                  dispatch={dispatch}
+                  aktiivinenKayttaja={aktiivinenKayttaja}
+                  tenttiData={tenttiData} setTenttiData={setTenttiData} 
+                  aktiivinenTentti={aktiivinenTentti} setAktiivinenTentti={setAktiivinenTentti} 
+                  tentit={tentit} setTentit={setTentit} 
+                  aktiivinenKurssi={aktiivinenKurssi} setAktiivinenKurssi={setAktiivinenKurssi} 
+                  kurssiData={kurssiData} 
+                  setKurssiDataIndex={setKurssiDataIndex} 
+                  lang={lang} />
+              </div>
+            </div>
           </section>
         : aktiivinenKurssi !== null && tentit ?               // kurssi valittu, näytetään kurssin tentit
-          <div className="grid-item"> {strings.kurssi} 
-            <span className="kurssivalinta">{kurssiData[kurssiDataIndex].kurssi}</span> {/* valitun kurssin nimi */}
-            <nav className="tenttivalikko">
-            {aktiivinenTentti === null ?                      // ei ole vielä valittu kurssilta tenttiä
-              state.map((item, index) =>                      // eli näytetään kurssin tentit valintaa varten
-                <span className="t-nav-item" key={item.tenttiid} onClick={() => {
-                   setAktiivinenTentti(index); setVastaukset(0)
-                  }}>{item.tentti}
-                </span>)
-            : hallinta && aktiivinenTentti !== null && !vahvista ?         // hallintatila ja tentti kurssilta valittuna
-              <span className="t-nav-item">
-                {/* <input type="text" value={state[aktiivinenTentti].tentti} onChange={(event) =>{ */}
-                <input type="text" defaultValue={state[aktiivinenTentti].tentti} id={state[aktiivinenTentti].tenttiid} onBlur={(event) => {
-                  var newText = document.getElementById(state[aktiivinenTentti].tenttiid);
-                  newText.value = newText.value.toUpperCase();
-                  muutaTentti(dispatch, newText, state[aktiivinenTentti], aktiivinenTentti)
-                }}>
-                </input> <button className="delButton" onClick={() => {   // poistakurssinappulan toiminto
-                            setVahvistusOtsikko(strings.tpoisto); 
-                            setVahvistusTeksti(`${strings.tvahvistus} (${state[aktiivinenTentti].tentti})?`); 
-                            setVahvistusTehtava("poistaTenttiKurssilta"); 
-                            setVahvistusPoisto(aktiivinenTentti); 
-                            setVahvistusPoisto2(aktiivinenKurssi); 
-                            setVahvista(true); 
-                  }}><DeleteTwoToneIcon />
-                </button>
-              </span> 
-            : // tentti on valittu ja näytetään vain valitun tentin nimi
-              <span className="t-nav-item" >
-                {state[aktiivinenTentti].tentti}
-              </span>}
-            {hallinta && aktiivinenTentti === null ?
-              <span className="add-item" onClick={() => { // lisätään uutta tenttiä kurssille
-                  var uusiTenttiNimi = "uusi";
-                  lisaaTentti(dispatch, uusiTenttiNimi, aktiivinenKurssi, aktiivinenKayttaja)
-                }}> + 
-              </span>
-            : ""}
-            </nav>
+          // <div className="grid-item"> {strings.kurssi}
+          <div className="grid-subContainer">
+            <div className="otsikko"> {strings.kurssi} <span className="kurssivalinta">{kurssiData[kurssiDataIndex].kurssi}
+              </span> {/* valitun kurssin nimi */}
+              <nav className="tenttivalikko">
+                {aktiivinenTentti === null ?                      // ei ole vielä valittu kurssilta tenttiä
+                  state.map((item, index) =>                      // eli näytetään kurssin tentit valintaa varten
+                  <span className="t-nav-item" key={item.tenttiid} onClick={() => {
+                      setAktiivinenTentti(index); 
+                      setVastaukset(0)
+                    }}>{item.tentti}
+                  </span>)
+                : hallinta && aktiivinenTentti !== null && !vahvista ?         // hallintatila ja tentti kurssilta valittuna
+                <span className="t-nav-item">
+                  <input type="text" defaultValue={state[aktiivinenTentti].tentti} id={state[aktiivinenTentti].tenttiid} onBlur={(event) => {
+                      var newText = document.getElementById(state[aktiivinenTentti].tenttiid);
+                      newText.value = newText.value.toUpperCase();
+                      muutaTentti(dispatch, newText, state[aktiivinenTentti], aktiivinenTentti)
+                    }}>
+                  </input> <button className="delButton" onClick={() => {   // poistakurssinappulan toiminto
+                      setVahvistusOtsikko(strings.tpoisto); 
+                      setVahvistusTeksti(`${strings.tvahvistus} (${state[aktiivinenTentti].tentti})?`); 
+                      setVahvistusTehtava("poistaTenttiKurssilta"); 
+                      setVahvistusPoisto(aktiivinenTentti); 
+                      setVahvistusPoisto2(aktiivinenKurssi); 
+                      setVahvista(true); 
+                    }}><DeleteTwoToneIcon />
+                  </button>
+                </span> 
+                : // tentti on valittu ja näytetään vain valitun tentin nimi
+                <span className="t-nav-item" >
+                  {state[aktiivinenTentti].tentti}
+                </span>}
+                {hallinta && aktiivinenTentti === null ?
+                <span className="add-item" onClick={() => { // lisätään uutta tenttiä kurssille
+                    var uusiTenttiNimi = "uusi";
+                    lisaaTentti(dispatch, uusiTenttiNimi, aktiivinenKurssi, aktiivinenKayttaja)
+                  }}> + 
+                </span>
+                : ""}
+              </nav>
+            </div>
+            <div className="grid-item2">
+              {aktiivinenTentti !== null && !tietoa && !kaaviot && !vahvista?
+                <div className="content">
+                  <Kysymykset dispatch={dispatch} data={state[aktiivinenTentti]} tenttiIndex={aktiivinenTentti}
+                    vastaukset={vastaukset} setVastaukset={setVastaukset} hallinta={hallinta} setHallinta={setHallinta} 
+                    kaaviot={kaaviot} setKaaviot={setKaaviot} setVahvista={setVahvista} vahvista={vahvista} 
+                    setVahvistusOtsikko={setVahvistusOtsikko} vahvistusOtsikko={vahvistusOtsikko} 
+                    setVahvistusTeksti={setVahvistusTeksti} vahvistusTeksti={vahvistusTeksti} 
+                    setVahvistusTehtava={setVahvistusTehtava} vahvistusTehtava={vahvistusTehtava} 
+                    setVahvistusPoisto={setVahvistusPoisto} vahvistusPoisto={vahvistusPoisto} 
+                    setVahvistusPoisto2={setVahvistusPoisto2} vahvistusPoisto2={vahvistusPoisto2}/>
+                </div>
+              : vahvista ? 
+                <div className="content">
+                  <ConfirmDialog aktiivinenTentti={aktiivinenTentti} setAktiivinenTentti={setAktiivinenTentti}
+                      otsikko={vahvistusOtsikko} teksti={vahvistusTeksti} 
+                      vahvista={vahvista} setVahvista={setVahvista} 
+                      onConfirmAction={vahvistusTehtava} dispatch={dispatch} 
+                      data={state[aktiivinenTentti]} index={vahvistusPoisto} index2={vahvistusPoisto2} />
+                </div>
+              : kaaviot ?
+                <div className="content">
+                  <section className="charts">
+                    <ChartExample otsikot={strings.gotsikot} 
+                        tiedot={[5, 22, 10, 10]} 
+                        tyyppi={strings.jakauma} 
+                        valinta={"Doughnut"} />
+                    <ChartExample otsikot={strings.gotsikot} 
+                        tiedot={[5, 22, 10, 10]} 
+                        tyyppi={strings.aluepisteet} 
+                        valinta={"Bar"} />
+                    <button className="button" onClick={() => { 
+                      setKaaviot(0) }}>{strings.paluu}
+                    </button>
+                  </section>  
+                </div>
+              :""}
+            </div>
           </div>
-        : tietoa ?
-          <section className="vastaus">{window.open("https://www.youtube.com/watch?v=sAqnNWUD79Q", "_self")}</section>
-        : ""}
-        {aktiivinenTentti !== null && !tietoa && !kaaviot && !vahvista?
-         <Kysymykset dispatch={dispatch} data={state[aktiivinenTentti]} tenttiIndex={aktiivinenTentti}
-            vastaukset={vastaukset} setVastaukset={setVastaukset} hallinta={hallinta} setHallinta={setHallinta} 
-            kaaviot={kaaviot} setKaaviot={setKaaviot} setVahvista={setVahvista} vahvista={vahvista} 
-            setVahvistusOtsikko={setVahvistusOtsikko} vahvistusOtsikko={vahvistusOtsikko} 
-            setVahvistusTeksti={setVahvistusTeksti} vahvistusTeksti={vahvistusTeksti} 
-            setVahvistusTehtava={setVahvistusTehtava} vahvistusTehtava={vahvistusTehtava} 
-            setVahvistusPoisto={setVahvistusPoisto} vahvistusPoisto={vahvistusPoisto} 
-            setVahvistusPoisto2={setVahvistusPoisto2} vahvistusPoisto2={vahvistusPoisto2}/>
-        : vahvista ? 
-          <ConfirmDialog aktiivinenTentti={aktiivinenTentti} setAktiivinenTentti={setAktiivinenTentti}
-              otsikko={vahvistusOtsikko} teksti={vahvistusTeksti} 
-              vahvista={vahvista} setVahvista={setVahvista} 
-              onConfirmAction={vahvistusTehtava} dispatch={dispatch} 
-              data={state[aktiivinenTentti]} index={vahvistusPoisto} index2={vahvistusPoisto2} />
-        : kaaviot ?
-          <section className="charts">
-            <ChartExample otsikot={strings.gotsikot} tiedot={[5, 22, 10, 10]} tyyppi={strings.jakauma} valinta={"Doughnut"} />
-            <ChartExample otsikot={strings.gotsikot} tiedot={[5, 22, 10, 10]} tyyppi={strings.aluepisteet} valinta={"Bar"} />
-            <button className="button" onClick={() => { setKaaviot(0) }}>{strings.paluu}</button>
-          </section>  
-        :""}
+        : ""}        
       </section>
-
-    : register ?
+      : register ?
       <section className="grid-container">
         <nav className="sovellusvalikko">
           <span className="s-nav-item">{strings.tervetuloa}</span>
@@ -325,7 +350,7 @@ function App() {
         </nav>
         <Register luoTunnus={luoTunnus} register={register} setRegister={setRegister} />
       </section>
-    : 
+      : 
       <section className="grid-container">
         <nav className="sovellusvalikko">
           <span className="s-nav-item">{strings.tervetuloa}</span>
