@@ -18,7 +18,7 @@ const Login = ({handleSubmit,register,setRegister}) => {
     }
     
     return (
-        <div className="grid-item"><br/>
+        <div className="content">
         <section className="kysymys">
             {strings.kirjaudu}
         <br/>

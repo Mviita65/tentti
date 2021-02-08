@@ -6,31 +6,31 @@ body {
   display: grid;
   grid-template-columns: 15% 70% 15%;
   justify-content: center;
-  padding: 0.5em;
+  padding: 0.15em;
   background-color:#fafafa;
 }
 
 /*  */
 .grid-subContainer { 
-  height: 85vh;
-  width: 85vw;
   grid-column-start: 2;
   grid-column-end: 3;
   display: grid;
+  height: 80vh;
+  width: 85vw;
   grid-template-columns: 100%;
-  grid-template-rows: 5%, 95%;
+  grid-template-rows: 5%, 90%, 5%;
   align-content: start;
 }
 
 .otsikko {
-  padding: 0.5em;
+  padding: 0.25em;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   font-weight: 400;
   color:#3f51b5;
 }
 
 .grid-item {
-  padding: 0.5em;
+  padding: 0.25em;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   font-weight: 400;
   color:#3f51b5;
@@ -40,12 +40,12 @@ body {
 
 .grid-item2 {
   display: grid;
-  grid-template-columns: 100%;
+  grid-template-columns: 85%;
   overflow: hidden;
 }
 
 .content { 
-  overflow-y: scroll;
+  overflow-y: scroll; 
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   font-weight: 400;
   color:#3f51b5;
@@ -56,7 +56,7 @@ nav {
   font-weight: 400;
   grid-column-start: 1;
   grid-column-end: 4;
-  padding: 1.25rem;
+  padding: 0.25rem;
   color: #fafafa; 
   text-align: left; 
 }
@@ -76,6 +76,7 @@ section {
 }
 
 .sovellusvalikko { 
+  padding: 1.15rem;
   background-color:#3f51b5;
   vertical-align: middle;
   color: #fafafa;
@@ -111,7 +112,7 @@ section {
   overflow: hidden;
   font-weight: bold;
   background-color: white;
-  padding: 0.75rem;
+  padding: 0.45rem;
   border-radius: 15px;
   border: solid;
   border-color: #f7f5f5;
@@ -123,11 +124,11 @@ section {
 
 .vastaus {
   font-weight: normal;
-  padding: 0.75rem;
+  padding: 0.55rem;
 }
 
 .alavalinta {
-  padding: 1rem;
+  padding: 0.25rem;
 }
 
 .button {
@@ -188,6 +189,6 @@ input[type=text] {
 }
 
 .charts {
-  max-width: 600px;
-  max-height: 1200px;
+  max-width: 500px;
+  max-height: 1000px;
 }

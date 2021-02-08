@@ -18,11 +18,6 @@ const Tenttivalikko = ({
   },[])
 
   return (
-    // <div className="grid-subContainer">
-    //   <div className="otsikko">
-    //     {strings.tenttivalinta}
-    //   </div>
-    //   <div className="grid-item2">
         <div className="content">
         {tenttiData.map((item, index) =>
             <div key={index} className="kysymys">
@@ -47,8 +42,6 @@ const Tenttivalikko = ({
             </div>
         )}
         </div>
-    //   </div>
-    // </div>
   )
 }
 

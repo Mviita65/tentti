@@ -16,7 +16,7 @@ const Kurssivalikko = ({
 
 
   return (
-    <div className="grid-item">{strings.kurssivalinta}
+    <div className="content">
         {kurssiData.map((item, index) =>
             <div key={item.kurssiid} className="kysymys">
                 <span className="t-nav-item" onClick={() =>{

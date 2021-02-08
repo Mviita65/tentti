@@ -47,7 +47,7 @@ const Register = ({luoTunnus,register,setRegister}) => {
     }
     
     return (
-        <div className="grid-item"><br/>
+        <div className="content"><br/>
         <section className="kysymys">
             {strings.rekisteröidy}
                     <br></br>

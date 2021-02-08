@@ -226,22 +226,33 @@ function App() {
         {tietoa ?
           <section className="vastaus">{window.open("https://www.youtube.com/watch?v=sAqnNWUD79Q", "_self")}</section>
         :aktiivinenKurssi === null && !tentit ?               // kurssivalikko näkyviin, ei vielä valittua kurssia
-          <section className="tenttivalikko">
-            <Kurssivalikko 
-                path={path}
-                dispatch={dispatch}
-                aktiivinenKayttaja={aktiivinenKayttaja}
-                aktiivinenKurssi={aktiivinenKurssi} setAktiivinenKurssi={setAktiivinenKurssi}
-                kurssiData={kurssiData} setKurssiData={setKurssiData} 
-                tentit={tentit} setTentit={setTentit} 
-                kurssiDataIndex={kurssiDataIndex} setKurssiDataIndex={setKurssiDataIndex} 
-                lang={lang} />
-          </section>
-        : aktiivinenKurssi === null && tentit ?               // tenttivalikko näkyviin, ei ole valittua kurssia
-          <section className="tenttivalikko">
+
             <div className="grid-subContainer">
               <div className="otsikko">
-                {strings.tenttivalinta}
+                <section className="tenttivalikko">
+                  {strings.kurssivalinta}
+                </section>
+              </div>
+              <div className="grid-item2">
+                <Kurssivalikko 
+                  path={path}
+                  dispatch={dispatch}
+                  aktiivinenKayttaja={aktiivinenKayttaja}
+                  aktiivinenKurssi={aktiivinenKurssi} setAktiivinenKurssi={setAktiivinenKurssi}
+                  kurssiData={kurssiData} setKurssiData={setKurssiData} 
+                  tentit={tentit} setTentit={setTentit} 
+                  kurssiDataIndex={kurssiDataIndex} setKurssiDataIndex={setKurssiDataIndex} 
+                  lang={lang} />
+              </div>
+              <div><p><br/></p></div>
+            </div>
+        : aktiivinenKurssi === null && tentit ?               // tenttivalikko näkyviin, ei ole valittua kurssia
+
+            <div className="grid-subContainer">
+              <div className="otsikko">
+                <section className="tenttivalikko">
+                  {strings.tenttivalinta}
+                </section>
               </div>
               <div className="grid-item2">
                 <Tenttivalikko 
@@ -256,8 +267,8 @@ function App() {
                   setKurssiDataIndex={setKurssiDataIndex} 
                   lang={lang} />
               </div>
+              <div><p><br/></p></div>
             </div>
-          </section>
         : aktiivinenKurssi !== null && tentit ?               // kurssi valittu, näytetään kurssin tentit
           // <div className="grid-item"> {strings.kurssi}
           <div className="grid-subContainer">
@@ -338,6 +349,7 @@ function App() {
                   </section>  
                 </div>
               :""}
+              <div><p><br/></p></div>
             </div>
           </div>
         : ""}        
@@ -348,7 +360,12 @@ function App() {
           <span className="s-nav-item">{strings.tervetuloa}</span>
           <span className="s-nav-item-right">{versio}</span>
         </nav>
+        <div className="grid-subContainer">
+        <div className="otsikko"></div>
+        <div className="grid-item2">
         <Register luoTunnus={luoTunnus} register={register} setRegister={setRegister} />
+        </div>
+        </div>
       </section>
       : 
       <section className="grid-container">
@@ -356,7 +373,12 @@ function App() {
           <span className="s-nav-item">{strings.tervetuloa}</span>
           <span className="s-nav-item-right">{versio}</span>
         </nav>
+        <div className="grid-subContainer">
+        <div className="otsikko"></div>
+        <div className="grid-item2">
         <Login handleSubmit={tarkistaLogin} register={register} setRegister={setRegister} />
+        </div>
+        </div>
       </section>}
   </div>)
 }
