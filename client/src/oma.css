@@ -15,10 +15,10 @@ body {
   grid-column-start: 2;
   grid-column-end: 3;
   display: grid;
-  height: 80vh;
+  height: 90vh;
   width: 85vw;
   grid-template-columns: 100%;
-  grid-template-rows: 5%, 90%, 5%;
+  grid-template-rows: 5%, 80%, 15%;
   align-content: start;
 }
 

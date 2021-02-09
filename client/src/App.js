@@ -111,6 +111,7 @@ function App() {
     const loggedUserJSON = window.localStorage.getItem('loggedAppUser')
     if (loggedUserJSON) {
       let kayttaja = JSON.parse(loggedUserJSON)
+      console.log(kayttaja)
       setAuthToken(kayttaja.token)
     }
   }
@@ -204,7 +205,8 @@ function App() {
               }}> {strings.tentit} 
             </span>}
           <span className="s-nav-item" onClick={e => {
-              setTentit(0); setKaaviot(0); setTietoa(1);      // näytetään TIETOA
+               window.open("https://www.youtube.com/watch?v=sAqnNWUD79Q","","width=800, height=600, top=140, left=0")
+              // setTietoa(1);      // näytetään TIETOA
             }}> {strings.tietoa}
           </span>
           <span className="s-nav-item" onClick={e => {        // vaihdetaan HALLINTA (päälle/pois)
@@ -226,9 +228,7 @@ function App() {
             isDragActive ? "" : ""
           }
         </div>
-        {tietoa ?
-          <section className="vastaus">{window.open("https://www.youtube.com/watch?v=sAqnNWUD79Q", "_self")}</section>
-        :aktiivinenKurssi === null && !tentit ?               // kurssivalikko näkyviin, ei vielä valittua kurssia
+        {aktiivinenKurssi === null && !tentit ?               // kurssivalikko näkyviin, ei vielä valittua kurssia
 
             <div className="grid-subContainer">
               <div className="otsikko">
@@ -316,7 +316,7 @@ function App() {
               </nav>
             </div>
             <div className="grid-item2">
-              {aktiivinenTentti !== null && !tietoa && !kaaviot && !vahvista?
+              {aktiivinenTentti !== null && !kaaviot && !vahvista?
                 <div className="content">
                   <Kysymykset dispatch={dispatch} data={state[aktiivinenTentti]} tenttiIndex={aktiivinenTentti}
                     vastaukset={vastaukset} setVastaukset={setVastaukset} hallinta={hallinta} setHallinta={setHallinta} 
