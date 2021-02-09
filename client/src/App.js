@@ -104,14 +104,14 @@ function App() {
   // }, [state])
 
   let headers = {
-    headers: { Authorization: `FrontKey ${authToken}` },
+    headers: { Authorization: `bearer ${authToken}` },
   }
 
   const userHook = () => {
     const loggedUserJSON = window.localStorage.getItem('loggedAppUser')
     if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setAuthToken(user.token)
+      let kayttaja = JSON.parse(loggedUserJSON)
+      setAuthToken(kayttaja.token)
     }
   }
 
@@ -158,8 +158,10 @@ function App() {
         return
       }
       setLogin(true)
-      console.log(kayttaja)
+      console.log(kayttaja.data.token)
+      setAuthToken(kayttaja.data.token)
       setAktiivinenKayttaja(kayttaja.data.id)
+      window.localStorage.setItem('loggedAppUser', JSON.stringify(kayttaja.data))
       setKayttajaNimi(`${kayttaja.data.etunimi} ${kayttaja.data.sukunimi} (${lang})`)
     } catch (exception) {
       console.log(exception)
@@ -176,7 +178,7 @@ function App() {
         return
       }
       setRegister(false)
-      setAktiivinenKayttaja(kayttaja.data.token.id)
+      setAktiivinenKayttaja(kayttaja.data.id)
     } catch (exception) {
       console.log(exception)
     }

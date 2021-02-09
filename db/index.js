@@ -4,6 +4,8 @@ const { Pool } = require('pg')
 
 var connectInfo = {}
 var pool = null;
+let SECRET = process.env.SECRET
+let PORT = process.env.PORT
 
 if (process.env.HEROKU) {
     pool = new Pool({connectionString:process.env.DATABASE_URL})
@@ -22,4 +24,6 @@ module.exports = {
   query: (text, params, callback) => {
     return pool.query(text, params, callback)
   },
+  SECRET,
+  PORT,
 }

@@ -6,7 +6,8 @@ var path = require('path')
 var bodyParser = require('body-parser')
 const app = express()
 const httpServer = require('http').createServer(app)  // tarvittiin webSocketissa ja tämä laitetaan kuuntelemaan!
-const port = process.env.PORT || 4000
+const db = require('./db')
+const port = process.env.PORT
 app.use(bodyParser.json())
 app.use(express.static('./client/build'))
 
@@ -19,7 +20,6 @@ var appOrigin = null
 var con_string = null
 if (!process.env.HEROKU) {
   con_string = `tcp://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}/${process.env.DB_NAME}`
-  // con_string = 'tcp://postgres:MAVLtd@localhost/Tenttikanta';
   appOrigin = 'http://localhost:3000'
   console.log("front:",appOrigin)
 
@@ -39,7 +39,6 @@ app.use(cors(corsOptions))
 
 app.use('/socket.io', express.static(__dirname + '/node_modules/socket.io')) //static socket.io
 
-const db = require('./db')
 const { response } = require('express')
 
 var jwt = require('jsonwebtoken')
@@ -144,7 +143,7 @@ app.post('/login', (req, res, next) => {
             id: tempUser.kayttajaid,
           }
           const token = jwt.sign(userForToken, process.env.SECRET) // Token lähtee tässä
-            res.status(200).send({token, etunimi: tempUser.etunimi, sukunimi: tempUser.sukunimi})
+            res.status(200).send({token, id: tempUser.kayttajaid, etunimi: tempUser.etunimi, sukunimi: tempUser.sukunimi})
         })
   })
   .catch((err) => {
@@ -685,7 +684,7 @@ app.post('/upload', async (req, res) => {
   } catch (err) {
      res.status(500).send(err)
   }
-});
+})
 
 // --------------------------Älä kommentoi pois ------------------------------------------------------
 app.get('*', (req,res)=>{
