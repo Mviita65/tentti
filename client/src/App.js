@@ -361,10 +361,11 @@ function App() {
           <span className="s-nav-item-right">{versio}</span>
         </nav>
         <div className="grid-subContainer">
-        <div className="otsikko"></div>
-        <div className="grid-item2">
-        <Register luoTunnus={luoTunnus} register={register} setRegister={setRegister} />
-        </div>
+          <div className="otsikko"></div>
+          <div className="grid-item2">
+            <Register luoTunnus={luoTunnus} register={register} setRegister={setRegister} />
+          </div>
+          <div><p><br/></p></div>
         </div>
       </section>
       : 
@@ -374,10 +375,11 @@ function App() {
           <span className="s-nav-item-right">{versio}</span>
         </nav>
         <div className="grid-subContainer">
-        <div className="otsikko"></div>
-        <div className="grid-item2">
-        <Login handleSubmit={tarkistaLogin} register={register} setRegister={setRegister} />
-        </div>
+          <div className="otsikko"></div>
+          <div className="grid-item2">
+            <Login handleSubmit={tarkistaLogin} register={register} setRegister={setRegister} />
+          </div>
+          <div><p><br/></p></div>
         </div>
       </section>}
   </div>)

@@ -1,3 +1,5 @@
+const dotenv = require('dotenv')
+dotenv.config()
 const cors = require('cors')
 const express = require('express')
 var path = require('path')
@@ -16,7 +18,8 @@ app.use(fileUpload({
 var appOrigin = null
 var con_string = null
 if (!process.env.HEROKU) {
-  con_string = 'tcp://postgres:MAVLtd@localhost/Tenttikanta';
+  con_string = `tcp://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}/${process.env.DB_NAME}`
+  // con_string = 'tcp://postgres:MAVLtd@localhost/Tenttikanta';
   appOrigin = 'http://localhost:3000'
   console.log("front:",appOrigin)
 
