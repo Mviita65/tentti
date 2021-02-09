@@ -143,8 +143,8 @@ app.post('/login', (req, res, next) => {
             username: tempUser.sahkoposti,
             id: tempUser.kayttajaid,
           }
-          const token = jwt.sign(userForToken, 'tenttiJ') // Token lähtee tässä
-            res.status(200).send({token, id: tempUser.kayttajaid, etunimi: tempUser.etunimi, sukunimi: tempUser.sukunimi})
+          const token = jwt.sign(userForToken, process.env.SECRET) // Token lähtee tässä
+            res.status(200).send({token, etunimi: tempUser.etunimi, sukunimi: tempUser.sukunimi})
         })
   })
   .catch((err) => {

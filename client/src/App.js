@@ -158,6 +158,7 @@ function App() {
         return
       }
       setLogin(true)
+      console.log(kayttaja)
       setAktiivinenKayttaja(kayttaja.data.id)
       setKayttajaNimi(`${kayttaja.data.etunimi} ${kayttaja.data.sukunimi} (${lang})`)
     } catch (exception) {
@@ -175,7 +176,7 @@ function App() {
         return
       }
       setRegister(false)
-      setAktiivinenKayttaja(kayttaja.data.id)
+      setAktiivinenKayttaja(kayttaja.data.token.id)
     } catch (exception) {
       console.log(exception)
     }
