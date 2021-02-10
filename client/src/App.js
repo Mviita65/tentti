@@ -205,8 +205,8 @@ function App() {
               }}> {strings.tentit} 
             </span>}
           <span className="s-nav-item" onClick={e => {
-               window.open("https://www.youtube.com/watch?v=sAqnNWUD79Q","","width=800, height=600, top=140, left=0")
-              // setTietoa(1);      // näytetään TIETOA
+              //  window.open("https://www.youtube.com/watch?v=sAqnNWUD79Q","","width=800, height=600, top=140, left=0")
+              setTietoa(1);      // näytetään TIETOA
             }}> {strings.tietoa}
           </span>
           <span className="s-nav-item" onClick={e => {        // vaihdetaan HALLINTA (päälle/pois)
@@ -228,7 +228,11 @@ function App() {
             isDragActive ? "" : ""
           }
         </div>
-        {aktiivinenKurssi === null && !tentit ?               // kurssivalikko näkyviin, ei vielä valittua kurssia
+        {tietoa ?
+          <section className="vastaus">
+            {window.open("https://www.youtube.com/watch?v=sAqnNWUD79Q", "_self")}
+          </section>
+        :aktiivinenKurssi === null && !tentit ?               // kurssivalikko näkyviin, ei vielä valittua kurssia
 
             <div className="grid-subContainer">
               <div className="otsikko">
