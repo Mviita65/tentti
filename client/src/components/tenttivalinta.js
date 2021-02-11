@@ -11,10 +11,11 @@ const Tenttivalikko = ({
     tentit,setTentit,
     setAktiivinenKurssi,aktiivinenKurssi,
     setKurssiDataIndex,
-    kurssiData,setKurssiData}) => {
+    kurssiData,setKurssiData,
+    headers}) => {
 
   useEffect(() => {
-    fetchTentit(tenttiData,setTenttiData) 
+    fetchTentit(tenttiData,setTenttiData,headers) 
   },[])
 
   return (
@@ -22,7 +23,7 @@ const Tenttivalikko = ({
         {tenttiData.map((item, index) =>
             <div key={index} className="kysymys">
                 <span className="t-nav-item" onClick={() =>{
-                  fetchKurssinData(dispatch,item.kurssiid,aktiivinenKayttaja,path)
+                  fetchKurssinData(dispatch,item.kurssiid,aktiivinenKayttaja,path,headers)
                   setAktiivinenKurssi(item.kurssiid)
                   for (let i=0; i < kurssiData.length; i++){
                     if (kurssiData[i].kurssiid === item.kurssiid){

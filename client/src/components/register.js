@@ -3,7 +3,7 @@ import cathead from './img/cathead.jpg';
 import strings from './merkkijonot';
 import {tarkistaSahkoposti,tarkistaSalasana} from './inputchecks.js';
 
-const Register = ({luoTunnus,register,setRegister}) => {
+const Register = ({luoTunnus,register,setRegister, setAktiivinenKayttaja}) => {
     
     const [firstname, setFirstname] = useState("");
     const [surename, setSurename] = useState("");
@@ -36,7 +36,7 @@ const Register = ({luoTunnus,register,setRegister}) => {
                         role : role
                     }
 
-                    luoTunnus(e, uusiKayttaja);
+                    luoTunnus(e, uusiKayttaja, setRegister, setAktiivinenKayttaja);
                 }
             } else {
                 setViesti(strings.salasanamuoto)

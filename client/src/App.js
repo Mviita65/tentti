@@ -5,11 +5,12 @@ import { useDropzone } from 'react-dropzone';
 import request from 'superagent';
 import DeleteTwoToneIcon from '@material-ui/icons/DeleteTwoTone';
 import BuildIcon from '@material-ui/icons/Build';
-import Axios from 'axios'
 import Login from './components/login'
 import Register from './components/register'
 import {
-  fetchKurssinData,
+  fetchKurssit,
+  tarkistaLogin,
+  luoTunnus,
   muutaTentti,
   lisaaTentti,
 } from './components/dataManipulation.js';
@@ -71,6 +72,27 @@ function App() {
       throw new Error("Check environment settings")
   }
 
+  let headers = {
+    headers: { Authorization: `bearer ${authToken}` },
+  }
+  
+  const userHook = () => {
+    const loggedUserJSON = window.localStorage.getItem('loggedAppUser')
+    if (loggedUserJSON) {
+      let kayttaja = JSON.parse(loggedUserJSON)
+      console.log(kayttaja)
+      setAuthToken(kayttaja.token)
+    }
+  }
+  
+  useEffect(userHook, [])
+
+  const hook = () => {
+    userHook();
+    fetchKurssit(kurssiData,setKurssiData,headers);
+  }
+  useEffect(hook,[authToken])
+
   // useEffect(() => {
 
   //   // const createData = async () => {
@@ -103,20 +125,7 @@ function App() {
 
   // }, [state])
 
-  let headers = {
-    headers: { Authorization: `bearer ${authToken}` },
-  }
-
-  const userHook = () => {
-    const loggedUserJSON = window.localStorage.getItem('loggedAppUser')
-    if (loggedUserJSON) {
-      let kayttaja = JSON.parse(loggedUserJSON)
-      console.log(kayttaja)
-      setAuthToken(kayttaja.token)
-    }
-  }
-
-  useEffect(userHook, [])
+  
 
   const onDrop = useCallback(files => {
     console.log(files);
@@ -148,43 +157,6 @@ function App() {
     });
     return () => socket.disconnect();
   }, [endpoint,enqueueSnackbar]);
-
-
-  const tarkistaLogin = async (e, userdata) => {
-    e.preventDefault();
-    try {
-      let kayttaja = await Axios.post(path + "login", userdata)
-      if (kayttaja.lenght === 0) {
-        console.log("Invalid username of password")
-        return
-      }
-      setLogin(true)
-      console.log(kayttaja.data.token)
-      setAuthToken(kayttaja.data.token)
-      setAktiivinenKayttaja(kayttaja.data.id)
-      window.localStorage.setItem('loggedAppUser', JSON.stringify(kayttaja.data))
-      setKayttajaNimi(`${kayttaja.data.etunimi} ${kayttaja.data.sukunimi} (${lang})`)
-    } catch (exception) {
-      console.log(exception)
-    }
-  }
-  
-  const luoTunnus = async (e, uusiKayttaja) => {
-    e.preventDefault();
-  
-    try {
-      let kayttaja = await Axios.post(path + "register", uusiKayttaja)
-      if (kayttaja.lenght === 0) {
-        console.log("missä mättää?")
-        return
-      }
-      setRegister(false)
-      setAktiivinenKayttaja(kayttaja.data.id)
-    } catch (exception) {
-      console.log(exception)
-    }
-  }
-  
   
 
   return (
@@ -249,7 +221,8 @@ function App() {
                   kurssiData={kurssiData} setKurssiData={setKurssiData} 
                   tentit={tentit} setTentit={setTentit} 
                   kurssiDataIndex={kurssiDataIndex} setKurssiDataIndex={setKurssiDataIndex} 
-                  lang={lang} />
+                  lang={lang}
+                  headers={headers}/>
               </div>
               <div><p><br/></p></div>
             </div>
@@ -272,7 +245,8 @@ function App() {
                   aktiivinenKurssi={aktiivinenKurssi} setAktiivinenKurssi={setAktiivinenKurssi} 
                   kurssiData={kurssiData} 
                   setKurssiDataIndex={setKurssiDataIndex} 
-                  lang={lang} />
+                  lang={lang}
+                  headers={headers} />
               </div>
               <div><p><br/></p></div>
             </div>
@@ -294,7 +268,7 @@ function App() {
                   <input type="text" defaultValue={state[aktiivinenTentti].tentti} id={state[aktiivinenTentti].tenttiid} onBlur={(event) => {
                       var newText = document.getElementById(state[aktiivinenTentti].tenttiid);
                       newText.value = newText.value.toUpperCase();
-                      muutaTentti(dispatch, newText, state[aktiivinenTentti], aktiivinenTentti)
+                      muutaTentti(dispatch, newText, state[aktiivinenTentti], aktiivinenTentti,headers)
                     }}>
                   </input> <button className="delButton" onClick={() => {   // poistakurssinappulan toiminto
                       setVahvistusOtsikko(strings.tpoisto); 
@@ -313,7 +287,7 @@ function App() {
                 {hallinta && aktiivinenTentti === null ?
                 <span className="add-item" onClick={() => { // lisätään uutta tenttiä kurssille
                     var uusiTenttiNimi = "uusi";
-                    lisaaTentti(dispatch, uusiTenttiNimi, aktiivinenKurssi, aktiivinenKayttaja)
+                    lisaaTentti(dispatch, uusiTenttiNimi, aktiivinenKurssi, aktiivinenKayttaja,headers)
                   }}> + 
                 </span>
                 : ""}
@@ -329,7 +303,8 @@ function App() {
                     setVahvistusTeksti={setVahvistusTeksti} vahvistusTeksti={vahvistusTeksti} 
                     setVahvistusTehtava={setVahvistusTehtava} vahvistusTehtava={vahvistusTehtava} 
                     setVahvistusPoisto={setVahvistusPoisto} vahvistusPoisto={vahvistusPoisto} 
-                    setVahvistusPoisto2={setVahvistusPoisto2} vahvistusPoisto2={vahvistusPoisto2}/>
+                    setVahvistusPoisto2={setVahvistusPoisto2} vahvistusPoisto2={vahvistusPoisto2}
+                    headers={headers}/>
                 </div>
               : vahvista ? 
                 <div className="content">
@@ -337,7 +312,8 @@ function App() {
                       otsikko={vahvistusOtsikko} teksti={vahvistusTeksti} 
                       vahvista={vahvista} setVahvista={setVahvista} 
                       onConfirmAction={vahvistusTehtava} dispatch={dispatch} 
-                      data={state[aktiivinenTentti]} index={vahvistusPoisto} index2={vahvistusPoisto2} />
+                      data={state[aktiivinenTentti]} index={vahvistusPoisto} index2={vahvistusPoisto2}
+                      headers={headers} />
                 </div>
               : kaaviot ?
                 <div className="content">
@@ -370,7 +346,10 @@ function App() {
         <div className="grid-subContainer">
           <div className="otsikko"></div>
           <div className="grid-item2">
-            <Register luoTunnus={luoTunnus} register={register} setRegister={setRegister} />
+            <Register 
+                luoTunnus={luoTunnus} 
+                register={register} setRegister={setRegister}
+                setAktiivinenKayttaja={setAktiivinenKayttaja}/>
           </div>
           <div><p><br/></p></div>
         </div>
@@ -384,7 +363,13 @@ function App() {
         <div className="grid-subContainer">
           <div className="otsikko"></div>
           <div className="grid-item2">
-            <Login handleSubmit={tarkistaLogin} register={register} setRegister={setRegister} />
+            <Login 
+                handleSubmit={tarkistaLogin} 
+                register={register} setRegister={setRegister}
+                login={login} setLogin={setLogin}
+                setAuthToken={setAuthToken} 
+                setKayttajaNimi={setKayttajaNimi}
+                setAktiivinenKayttaja={setAktiivinenKayttaja} />
           </div>
           <div><p><br/></p></div>
         </div>

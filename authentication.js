@@ -4,9 +4,8 @@ const jwt = require('jsonwebtoken'); //token
 
 
 
-const getTokenFrom = request => {
+const getTokenFrom = (request) => {
     const authorization = request.get('authorization')
-    console.log(authorization);
     if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
         return authorization.substring(7)
     }
@@ -15,21 +14,25 @@ const getTokenFrom = request => {
 
 const isAuthenticated = (request, response, next) => {
     const token = getTokenFrom(request);
-    console.log(token);
 
     if (!token) {
         return response.status(401).json({ error: 'token missing' });
     }
 
+    let decodedToken = null;
 
-    const decodedToken = jwt.verify(token, process.env.SECRET);
-    console.log("decoded", decodedToken);
+    try {
+        decodedToken = jwt.verify(token, process.env.SECRET);
+    }
+    catch (error) {
+        console.log("jwt error");
+    }
 
     if (!decodedToken || !decodedToken.id) {
         return response.status(401).json({ error: 'token invalid' });
     }    
-    
-    return true
+    console.log("autentikoitu")
+    next()
 }
 
 module.exports = isAuthenticated;

@@ -1,4 +1,5 @@
 import Axios from 'axios';
+import React, { useEffect } from 'react';
 
 const lang = navigator.language
 
@@ -17,24 +18,65 @@ switch (process.env.NODE_ENV) {
     throw new Error("Check environment settings")
 } 
 
-const fetchKurssinData = async (dispatch,aktiivinenKurssi,aktiivinenKayttaja,path) => { // hakee yhden kurssin tenttien tiedot ja yhden käyttäjän antamat vastaukset kurssin tenttien kysymyksiin
+const tarkistaLogin = async (e, userdata, 
+      login, setLogin, 
+      setAuthToken, 
+      setKayttajaNimi, 
+      setAktiivinenKayttaja
+) => {
+  e.preventDefault();
+  try {
+    let kayttaja = await Axios.post(path + "login", userdata)
+    if (kayttaja.lenght === 0) {
+      console.log("Invalid username of password")
+      return
+    }
+    setLogin(true)
+    console.log(kayttaja.data.token)
+    setAuthToken(kayttaja.data.token)
+    setKayttajaNimi(`${kayttaja.data.etunimi} ${kayttaja.data.sukunimi} (${lang})`)
+    setAktiivinenKayttaja(kayttaja.data.id)
+    window.localStorage.setItem('loggedAppUser', JSON.stringify(kayttaja.data))
+  } catch (exception) {
+    console.log(exception)
+  }
+}
+
+const luoTunnus = async (e, uusiKayttaja, setRegister, setAktiivinenKayttaja) => {
+  e.preventDefault();
+
+  try {
+    let kayttaja = await Axios.post(path + "register", uusiKayttaja)
+    if (kayttaja.lenght === 0) {
+      console.log("missä mättää?")
+      return
+    }
+    setRegister(false)
+    setAktiivinenKayttaja(kayttaja.data.id)
+  } catch (exception) {
+    console.log(exception)
+  }
+}
+
+
+const fetchKurssinData = async (dispatch,aktiivinenKurssi,aktiivinenKayttaja,path,headers) => { // hakee yhden kurssin tenttien tiedot ja yhden käyttäjän antamat vastaukset kurssin tenttien kysymyksiin
   if (aktiivinenKurssi !== null) {
     try {
       // let result = await Axios.get("http://localhost:3001/tentit/")
       let kurssiid = aktiivinenKurssi
       let kayttajaid = aktiivinenKayttaja // oppilas eli vastaukset yhdeltä oppilaalta
-      let result = await Axios.get(path + "kurssi/" + kurssiid)
+      let result = await Axios.get(path + "kurssi/" + kurssiid,headers)
       if (result.data.length > 0) {
         for (var i = 0; i < result.data.length; i++) {       // käydään läpi noudetun kurssin tentit
           result.data[i].kysymykset = []
-          let kysymykset = await Axios.get(path + "kysymys/tentti/" + result.data[i].tenttiid)
+          let kysymykset = await Axios.get(path + "kysymys/tentti/" + result.data[i].tenttiid,headers)
           result.data[i].kysymykset = kysymykset.data
           if (result.data[i].kysymykset.length > 0) {
             for (var j = 0; j < result.data[i].kysymykset.length; j++) { // käydään läpi noudetut tentin kysymykset
               result.data[i].kysymykset[j].vaihtoehdot = []
-              let vaihtoehdot = await Axios.get(path + "vaihtoehto/kysymys/" + result.data[i].kysymykset[j].kysymysid)
+              let vaihtoehdot = await Axios.get(path + "vaihtoehto/kysymys/" + result.data[i].kysymykset[j].kysymysid,headers)
               result.data[i].kysymykset[j].vaihtoehdot = vaihtoehdot.data
-              let vastaukset = await Axios.get(path + "kayttaja/" + kayttajaid + "/kysymys/" + result.data[i].kysymykset[j].kysymysid)
+              let vastaukset = await Axios.get(path + "kayttaja/" + kayttajaid + "/kysymys/" + result.data[i].kysymykset[j].kysymysid,headers)
               if (result.data[i].kysymykset[j].vaihtoehdot.length > 0) {
                 for (var k = 0; k < result.data[i].kysymykset[j].vaihtoehdot.length; k++) {  // käydään läpi noudetut kysymyksen vaihtoehdot
                   result.data[i].kysymykset[j].vaihtoehdot[k].valittu = false               // käyttäjän vastaukset alustetaan falsella
@@ -67,10 +109,10 @@ const fetchKurssinData = async (dispatch,aktiivinenKurssi,aktiivinenKayttaja,pat
   }
 }
 
-  const fetchKurssit = async (kurssiData,setKurssiData) => {
+  const fetchKurssit = async (kurssiData,setKurssiData,headers) => {
     try {
       let kurssitiedot = []
-      let result = await Axios.get(path + "kurssi")
+      let result = await Axios.get(path + "kurssi",headers)
       if (result.data.length > 0){
         for (var i = 0; i < result.data.length; i++){
           let kurssitieto = {
@@ -90,10 +132,10 @@ const fetchKurssinData = async (dispatch,aktiivinenKurssi,aktiivinenKayttaja,pat
     }
   };
 
-  const fetchTentit = async (tenttiData,setTenttiData) => {
+  const fetchTentit = async (tenttiData,setTenttiData,headers) => {
     try {
       let tenttitiedot = []
-      let result = await Axios.get(path + "tentti")
+      let result = await Axios.get(path + "tentti",headers)
       if (result.data.length > 0){
         for (var i = 0; i < result.data.length; i++){
           let tenttitieto = {
@@ -121,14 +163,14 @@ const fetchKurssinData = async (dispatch,aktiivinenKurssi,aktiivinenKayttaja,pat
     }
   };
 
-
-  const muutaTentti = async(dispatch,event,data,aktiivinenTentti) => {
+ 
+  const muutaTentti = async(dispatch,event,data,aktiivinenTentti,headers) => {
     let id = data.tenttiid
     let body = {
       tentti: event.value.toUpperCase(),
     }
     try {
-      let result = await Axios.put(path + "tentti/"+id,body)
+      let result = await Axios.put(path + "tentti/"+id,body,headers)
       dispatch({type:"TENTTI_NIMETTY", data:{newTenttiNimi: body.tentti, tenttiIndex: aktiivinenTentti}})
     } catch (exception) {
       console.log(exception)
@@ -142,7 +184,7 @@ const fetchKurssinData = async (dispatch,aktiivinenKurssi,aktiivinenKayttaja,pat
       kysymys_aihe_id: props.data.kysymykset[kysymysIndex].kysymys_aihe_id
     } 
     try {
-      let result = await Axios.put(path + "kysymys/"+id,body)
+      let result = await Axios.put(path + "kysymys/"+id,body,props.headers)
       props.dispatch({ type: "KYSYMYS_NIMETTY", 
         data: {kysymys: body.kysymys, tenttiIndex: props.tenttiIndex, kyIndex: kysymysIndex} })
     } catch (exception) {
@@ -158,7 +200,7 @@ const fetchKurssinData = async (dispatch,aktiivinenKurssi,aktiivinenKayttaja,pat
       vaihtoehto_kysymys_id: props.data.kysymysid
     } 
     try {
-      let result = await Axios.put(path + "vaihtoehto/"+id,body)
+      let result = await Axios.put(path + "vaihtoehto/"+id,body,props.headers)
       props.dispatch({ type: "VAIHTOEHTO_NIMETTY", 
         data: { vaihtoehto: body.vaihtoehto, tenttiIndex: props.tenttiIndex, kyIndex: props.kysymysIndex, veIndex: veIndex } })
     } catch (exception) {
@@ -174,7 +216,7 @@ const fetchKurssinData = async (dispatch,aktiivinenKurssi,aktiivinenKayttaja,pat
       vaihtoehto_kysymys_id: props.data.kysymysid
     } 
     try {
-      let result = await Axios.put(path + "vaihtoehto/"+id,body)
+      let result = await Axios.put(path + "vaihtoehto/"+id,body,props.headers)
       props.dispatch({ type: "OIKEA_VAIHDETTU", 
         data: { korrekti: body.korrekti, tenttiIndex: props.tenttiIndex, kyIndex: props.kysymysIndex, veIndex: veIndex } })
     } catch (exception) {
@@ -194,11 +236,11 @@ const fetchKurssinData = async (dispatch,aktiivinenKurssi,aktiivinenKayttaja,pat
     }
     try {
       if (body.vastaus) {
-        let result = await Axios.post(path + "vastaus",body)
+        let result = await Axios.post(path + "vastaus",body,props.headers)
       } else {
-        let result2 = await Axios.get(path + "kayttaja/"+kayttajaid+"/tentti/"+props.tenttiid+"/vaihtoehto/"+body.vastaus_vaihtoehto_id)
+        let result2 = await Axios.get(path + "kayttaja/"+kayttajaid+"/tentti/"+props.tenttiid+"/vaihtoehto/"+body.vastaus_vaihtoehto_id,props.headers)
         vastausid = result2.data[0].vastausid
-        let poistoresult = await Axios.delete(path + "vastaus/"+vastausid)
+        let poistoresult = await Axios.delete(path + "vastaus/"+vastausid,props.headers)
       }
     } catch (exception) {
         console.log(exception)
@@ -207,13 +249,13 @@ const fetchKurssinData = async (dispatch,aktiivinenKurssi,aktiivinenKayttaja,pat
       data:{valittu: body.vastaus, tenttiIndex: props.tenttiIndex, kyIndex: props.kysymysIndex, veIndex: veIndex} })
   }
   
-  const lisaaTentti = async(dispatch,uusiTenttiNimi,aktiivinenKurssi,aktiivinenKayttaja) => {
+  const lisaaTentti = async(dispatch,uusiTenttiNimi,aktiivinenKurssi,aktiivinenKayttaja,headers) => {
 
     let body = {
       tentti: uusiTenttiNimi
     }
     try {
-      let result = await Axios.post(path + "tentti",body)
+      let result = await Axios.post(path + "tentti",body,headers)
       let tenttiId = result.data[0].tenttiid
       let body2 = {
         kurssi_kurssi_id: aktiivinenKurssi,
@@ -225,13 +267,13 @@ const fetchKurssinData = async (dispatch,aktiivinenKurssi,aktiivinenKayttaja,pat
         pistemaara: null,
         tenttialoituspvm: null
       }
-      let result2 = await Axios.post(path + "kurssitentti",body2)
+      let result2 = await Axios.post(path + "kurssitentti",body2,headers)
       let uusiTentti = {
         tenttiid: tenttiId,
         tentti: body.tentti,
         kysymykset: []
       }
-      let result3 = await Axios.post(path + "tenttikasittelija",body3)
+      let result3 = await Axios.post(path + "tenttikasittelija",body3,headers)
       dispatch({type: "TENTTI_LISATTY", data:{lisays: uusiTentti}})
     } catch (exception) {
       console.log(exception)
@@ -244,13 +286,13 @@ const fetchKurssinData = async (dispatch,aktiivinenKurssi,aktiivinenKayttaja,pat
       kysymys_aihe_id: 0
     } 
     try {
-      let result = await Axios.post(path + "kysymys",body)
+      let result = await Axios.post(path + "kysymys",body,props.headers)
       let id = result.data[0].kysymysid
       let body2 = {
         tkysymys_kysymys_id: id,
         tkysymys_tentti_id: props.data.tenttiid
       }
-      let result2 = await Axios.post(path + "tenttikysymys",body2)
+      let result2 = await Axios.post(path + "tenttikysymys",body2,props.headers)
       props.dispatch({type: "KYSYMYS_LISATTY", 
         data:{tenttiIndex: props.tenttiIndex, kysymysid: body2.tkysymys_kysymys_id}})
     } catch (exception) {
@@ -265,7 +307,7 @@ const fetchKurssinData = async (dispatch,aktiivinenKurssi,aktiivinenKayttaja,pat
       vaihtoehto_kysymys_id: props.data.kysymysid
     } 
     try {
-      let result = await Axios.post(path + "vaihtoehto/kysymys/"+props.data.kysymysid,body)
+      let result = await Axios.post(path + "vaihtoehto/kysymys/"+props.data.kysymysid,body,props.headers)
       let vaihtoehtoid = result.data[0].vaihtoehtoid
       props.dispatch({type: "VAIHTOEHTO_LISATTY", 
         data:{tenttiIndex: props.tenttiIndex, kyIndex: props.kysymysIndex, vaihtoehtoid: vaihtoehtoid} })
@@ -274,10 +316,10 @@ const fetchKurssinData = async (dispatch,aktiivinenKurssi,aktiivinenKayttaja,pat
     }
   }
 
-  const poistaTenttiKurssilta = async(dispatch, data, index, kurssiid) => {
+  const poistaTenttiKurssilta = async(dispatch, data, index, kurssiid, headers) => {
     let tenttiid = data.tenttiid
     try {
-      let result = await Axios.delete(path + "kurssitentti/"+tenttiid+"/kurssi/"+kurssiid)
+      let result = await Axios.delete(path + "kurssitentti/"+tenttiid+"/kurssi/"+kurssiid,headers)
       dispatch({type: "TENTTI_POISTETTU", 
         data:{ tenttiIndex: index} })
     } catch (exception) {
@@ -285,11 +327,11 @@ const fetchKurssinData = async (dispatch,aktiivinenKurssi,aktiivinenKayttaja,pat
     }
   }  
 
-  const poistaKysymysTentilta = async(dispatch, data, kysymysIndex, aktiivinenTentti) => {
+  const poistaKysymysTentilta = async(dispatch, data, kysymysIndex, aktiivinenTentti,headers) => {
     let kysymysid = data.kysymykset[kysymysIndex].kysymysid
     let tenttiid = data.tenttiid
     try {
-      let result = await Axios.delete(path + "tenttikysymys/"+kysymysid+"/tentti/"+tenttiid)
+      let result = await Axios.delete(path + "tenttikysymys/"+kysymysid+"/tentti/"+tenttiid,headers)
       dispatch({type: "KYSYMYS_POISTETTU", 
         data:{ tenttiIndex: aktiivinenTentti, kyIndex: kysymysIndex } })
     } catch (exception) {
@@ -297,10 +339,10 @@ const fetchKurssinData = async (dispatch,aktiivinenKurssi,aktiivinenKayttaja,pat
     }
   }
 
-  const poistaVaihtoehto = async(dispatch, data, veIndex, kysymysIndex, aktiivinenTentti) => {
+  const poistaVaihtoehto = async(dispatch, data, veIndex, kysymysIndex, aktiivinenTentti,headers) => {
     let id = data.kysymykset[kysymysIndex].vaihtoehdot[veIndex].vaihtoehtoid
     try {
-      let result = await Axios.delete(path + "vaihtoehto/"+id)
+      let result = await Axios.delete(path + "vaihtoehto/"+id,headers)
       dispatch({type: "VAIHTOEHTO_POISTETTU", 
         data:{ tenttiIndex: aktiivinenTentti, kyIndex: kysymysIndex, veIndex: veIndex }})
     } catch (exception) {
@@ -309,7 +351,8 @@ const fetchKurssinData = async (dispatch,aktiivinenKurssi,aktiivinenKayttaja,pat
   }
 
   export {
-
+    tarkistaLogin,
+    luoTunnus,
     fetchKurssinData,
     fetchKurssit,
     fetchTentit,

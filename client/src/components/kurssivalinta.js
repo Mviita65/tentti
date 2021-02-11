@@ -8,10 +8,11 @@ const Kurssivalikko = ({
   aktiivinenKurssi,setAktiivinenKurssi,
   kurssiData,setKurssiData,
   kurssiDataIndex,setKurssiDataIndex,
-  tentit,setTentit}) => {
+  tentit,setTentit,headers
+  }) => {
 
   useEffect(() => {
-    fetchKurssit(kurssiData,setKurssiData);
+    fetchKurssit(kurssiData,setKurssiData,headers);
   },[])
 
 
@@ -20,7 +21,7 @@ const Kurssivalikko = ({
         {kurssiData.map((item, index) =>
             <div key={item.kurssiid} className="kysymys">
                 <span className="t-nav-item" onClick={() =>{
-                    fetchKurssinData(dispatch,item.kurssiid,aktiivinenKayttaja,path)
+                    fetchKurssinData(dispatch,item.kurssiid,aktiivinenKayttaja,path,headers)
                     setAktiivinenKurssi(item.kurssiid); // valitun kurssin tenttien tietojen hakua varten
                     setKurssiDataIndex(index) // valitun kurssin tietoja varten 
                     setTentit(1);     // tenttinäyttö päälle kurssin valinnan jälkeen

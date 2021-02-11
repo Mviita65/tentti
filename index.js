@@ -53,6 +53,7 @@ var io = require('socket.io')(httpServer, {
 })
 
 var pg = require('pg'); 
+const isAuthenticated = require('./authentication')
 var pg_client = new pg.Client(con_string);
 pg_client.connect();
 var query = pg_client.query('LISTEN huomio');
@@ -66,11 +67,6 @@ io.sockets.on('connection', (socket) => {
   });
 });
 
-// pg_client.on('notification',async(data)=>{
-//   console.log(data.payload); 
-// })
-
-//httpServer.listen(9000)
 
 // var requestTime = function (req, res, next) {
 //   // req.requestTime = Date.now()
@@ -118,8 +114,6 @@ app.post('/register',(req, res, next) => {
 })
 
 //------------------------------------------LOGIN-----------------------------------------------------------------------------
-
-// login
 app.post('/login', (req, res, next) => {
   const body = req.body
 
@@ -152,10 +146,48 @@ app.post('/login', (req, res, next) => {
           { error: 'invalid username or password' }
       )
   })
-})   
+})
+
+//----------------------Drag'n'drop toiminto ilman autentikointia, mutta kirjautumisen takana -------------------------------
+app.post('/upload', async (req, res) => {
+  try {
+    if (!req.files || Object.keys(req.files).length === 0) {
+      return res.status(400).send('No files were uploaded.');
+    } else {
+      console.log(req.files)
+      let data = []                         // yksittäinen tiedosto ei tule taulukkona
+      if(!Array.isArray(req.files.file)) {  // eli tässä tulee vain yksittäinen tiedosto
+        req.files.file.mv('./uploads/'+req.files.file.name)
+        data.push({
+          name: req.files.file.name,
+          type: req.files.file.mimetype,
+          size: req.files.file.size
+        })
+      } else {                                        // tulee useampi tiedosto kerralla
+        Object.keys(req.files.file).forEach(item => { // ja taulukko käydään läpi tässä
+          req.files.file[item].mv('./uploads/'+req.files.file[item].name) 
+          data.push({
+            name: req.files.file[item].name,
+            type: req.files.file[item].mimetype,
+            size: req.files.file[item].size
+          })
+        })
+      } 
+      res.send({
+        message: 'Uploaded',
+        data: data
+      })
+    }
+  } catch (err) {
+     res.status(500).send(err)
+  }
+}) 
+
+//------------------------------------------ AUTENTIKOINTI ----------------------------------------------------------------
+
+app.use(isAuthenticated)
 
 //------------------------------------------- HAUT ------------------------------------------------------------------------
-
 // haetaan käyttäjät
 app.get('/kayttaja', (req, res, next) => {
   db.query('SELECT * FROM kayttaja', (err, result) => {
@@ -300,7 +332,6 @@ app.get('/kayttaja/:id/tentti/:id2/vaihtoehto/:id3',(req, res, next) => {
 })    
 
 //------------------------------------------- LISÄYKSET ------------------------------------------------------------------------
-
 // lisätään käyttäjä
 app.post('/kayttaja', (req, res, next) => {
   const body = req.body
@@ -464,7 +495,6 @@ app.post('/vastaus', (req, res, next) => {
 })
 
 //------------------------------------------- MUUTOKSET ------------------------------------------------------------------------
-
 // muutetaan käyttäjä
 app.put('/kayttaja/:id', (req, res, next) => {
   const body = req.body
@@ -557,8 +587,6 @@ app.delete('/vastaus/:id', (req, res, next) => {
 })
 
 //------------------------------------------- POISTOT ------------------------------------------------------------------------
-
-
 // poistetaan kurssi
 app.delete('/kurssi/:id', (req, res, next) => {
   db.query('DELETE FROM kurssi WHERE kurssiid=$1',[req.params.id],(err,result) => {
@@ -640,7 +668,6 @@ app.delete('/vaihtoehto/:id', (req, res, next) => {
 })
 
 //------------------------------------------- TARKISTUS ------------------------------------------------------------------------
-
 // kysymys mukana tenteissä, joiden alkamispäivät
 app.get('/kysymys/:id/tentti', (req,res,next) => {
   db.query('SELECT tkysymys_tentti_id,kurssi,aloituspvm FROM ((kurssi INNER JOIN kurssitentti ON kurssi_kurssi_id = kurssiid) INNER JOIN tenttikysymys ON tkysymys_tentti_id = kurssi_tentti_id) WHERE tkysymys_kysymys_id = $1',[req.params.id],(err,result) => {
@@ -649,41 +676,6 @@ app.get('/kysymys/:id/tentti', (req,res,next) => {
     }
     res.send(result.rows)
   })    
-})
-
-//---------------------------Drag'n'drop-------------------------------------------------------------
-app.post('/upload', async (req, res) => {
-  try {
-    if (!req.files || Object.keys(req.files).length === 0) {
-      return res.status(400).send('No files were uploaded.');
-    } else {
-      console.log(req.files)
-      let data = []                         // yksittäinen tiedosto ei tule taulukkona
-      if(!Array.isArray(req.files.file)) {  // eli tässä tulee vain yksittäinen tiedosto
-        req.files.file.mv('./uploads/'+req.files.file.name)
-        data.push({
-          name: req.files.file.name,
-          type: req.files.file.mimetype,
-          size: req.files.file.size
-        })
-      } else {                                        // tulee useampi tiedosto kerralla
-        Object.keys(req.files.file).forEach(item => { // ja taulukko käydään läpi tässä
-          req.files.file[item].mv('./uploads/'+req.files.file[item].name) 
-          data.push({
-            name: req.files.file[item].name,
-            type: req.files.file[item].mimetype,
-            size: req.files.file[item].size
-          })
-        })
-      } 
-      res.send({
-        message: 'Uploaded',
-        data: data
-      })
-    }
-  } catch (err) {
-     res.status(500).send(err)
-  }
 })
 
 // --------------------------Älä kommentoi pois ------------------------------------------------------

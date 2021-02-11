@@ -33,7 +33,8 @@ function Kysymykset(props) {  //näytölle tentin kysymykset ja kutsuu Vaihtoehd
               setVahvistusTeksti={props.setVahvistusTeksti} vahvistusTeksti={props.vahvistusTeksti}  
               setVahvistusTehtava={props.setVahvistusTehtava} vahvistusTehtava={props.vahvistusTehtava} 
               setVahvistusPoisto={props.setVahvistusPoisto} vahvistusPoisto={props.vahvistusPoisto} 
-              setVahvistusPoisto2={props.setVahvistusPoisto2} vahvistusPoisto2={props.vahvistusPoisto2}/> 
+              setVahvistusPoisto2={props.setVahvistusPoisto2} vahvistusPoisto2={props.vahvistusPoisto2}
+              headers={props.headers}/> 
         </div>):                                                          // tentti menossa
         props.data.kysymykset.map((item, kysymysIndex) =>
           <div key={item.kysymysid} className="kysymys">{item.kysymys} 
@@ -48,7 +49,8 @@ function Kysymykset(props) {  //näytölle tentin kysymykset ja kutsuu Vaihtoehd
               setVahvistusTeksti={props.setVahvistusTeksti} vahvistusTeksti={props.vahvistusTeksti}  
               setVahvistusTehtava={props.setVahvistusTehtava} vahvistusTehtava={props.vahvistusTehtava} 
               setVahvistusPoisto={props.setVahvistusPoisto} vahvistusPoisto={props.vahvistusPoisto} 
-              setVahvistusPoisto2={props.setVahvistusPoisto2} vahvistusPoisto2={props.vahvistusPoisto2}/>
+              setVahvistusPoisto2={props.setVahvistusPoisto2} vahvistusPoisto2={props.vahvistusPoisto2}
+              headers={props.headers}/>
       </div>)}
       {props.hallinta ? <div className="add"><span className="add-item" onClick={()=>{  // jos hallintatila, voi lisätä uuden kysymyksen
         lisaaKysymys(props)}}> + </span>

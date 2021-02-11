@@ -1,7 +1,14 @@
 import React, {useState} from 'react';
 import strings from './merkkijonot';
 
-const Login = ({handleSubmit,register,setRegister}) => {
+const Login = ({
+    handleSubmit,
+    register,setRegister,
+    login, setLogin, 
+    setAuthToken, 
+    setKayttajaNimi, 
+    setAktiivinenKayttaja
+}) => {
     
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -14,7 +21,11 @@ const Login = ({handleSubmit,register,setRegister}) => {
                 password : password
             };
 
-        handleSubmit(e, userdata);
+        handleSubmit(e, userdata,
+            login, setLogin, 
+            setAuthToken, 
+            setKayttajaNimi, 
+            setAktiivinenKayttaja);
     }
     
     return (
