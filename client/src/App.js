@@ -28,7 +28,7 @@ import ReactPlayer from 'react-player/youtube';
 
 function App() {
 
-  const versio = "ver. 0.65"
+  const versio = "ver. 0.75"
   const [dataAlustettu, setDataAlustettu] = useState(false)
   const [state, dispatch] = useReducer(reducer, [])
   const [tentit, setTentit] = useState(0)
@@ -205,7 +205,7 @@ function App() {
           <div className="grid-subContainer">
             <div className="otsikko">
               <section className="tenttivalikko">
-                {strings.tietoa}
+                {strings.tietoa} {strings.tohje}
               </section>
             </div>
             <div className="grid-item2">
