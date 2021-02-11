@@ -24,6 +24,7 @@ import ConfirmDialog from './components/confirmDialog.js';
 import strings from './components/merkkijonot.js';
 import socketIOClient from "socket.io-client";
 import { useSnackbar } from "notistack";
+import ReactPlayer from 'react-player/youtube';
 
 function App() {
 
@@ -201,9 +202,27 @@ function App() {
           }
         </div>
         {tietoa ?
-          <section className="vastaus">
-            {window.open("https://www.youtube.com/watch?v=sAqnNWUD79Q", "_self")}
-          </section>
+          <div className="grid-subContainer">
+            <div className="otsikko">
+              <section className="tenttivalikko">
+                {strings.tietoa}
+              </section>
+            </div>
+            <div className="grid-item2">
+              <div className="content">          
+                <ReactPlayer 
+                  url='https://www.youtube.com/watch?v=sAqnNWUD79Q'
+                  width='455px'
+                  height='256px'
+                />
+                <button className="button" onClick={() => { 
+                  setTietoa(0) }}>{strings.paluu}
+                </button>
+              </div>
+              <div><p><br/></p></div>
+            </div>
+          </div>
+        
         :aktiivinenKurssi === null && !tentit ?               // kurssivalikko näkyviin, ei vielä valittua kurssia
 
             <div className="grid-subContainer">

@@ -6,6 +6,7 @@ var connectInfo = {}
 var pool = null;
 let SECRET = process.env.SECRET
 let PORT = process.env.PORT
+let TEACHER = process.env.TEACHER
 
 if (process.env.HEROKU) {
     pool = new Pool({connectionString:process.env.DATABASE_URL})
@@ -26,4 +27,5 @@ module.exports = {
   },
   SECRET,
   PORT,
+  TEACHER,
 }

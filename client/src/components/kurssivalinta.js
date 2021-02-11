@@ -1,6 +1,5 @@
 import '../oma.css';
 import React, { useEffect } from 'react';
-import strings from './merkkijonot';
 import { fetchKurssinData,fetchKurssit } from './dataManipulation.js'
 
 const Kurssivalikko = ({
@@ -11,9 +10,10 @@ const Kurssivalikko = ({
   tentit,setTentit,headers
   }) => {
 
-  useEffect(() => {
-    fetchKurssit(kurssiData,setKurssiData,headers);
-  },[])
+  // kurssit haetaan jo app.js hookissa 
+  // useEffect(() => {
+  //   fetchKurssit(kurssiData,setKurssiData,headers);
+  // },[])
 
 
   return (
