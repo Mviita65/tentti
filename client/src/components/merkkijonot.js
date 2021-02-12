@@ -27,7 +27,7 @@ let strings = new LocalizedStrings({
         kurssit: "KURSSIT",
         tentit: "TENTIT",
         tietoa: "TIETOA SOVELLUKSESTA",
-        tohje: "(kaksoisklikkaus/ESC = kokoruutu/pikkukuva)",
+        tohje: "(kaksoisklikkaus videossa = kokoruutu/pikkuruutu)",
         poistu: "POISTU",
         kurssivalinta: "KURSSIVALINTA:",
         tenttivalinta: "TENTTIVALINTA (ei valittua kurssia, kaikki tentit):",
