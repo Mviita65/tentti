@@ -9,7 +9,8 @@ let PORT = process.env.PORT
 let TEACHER = process.env.TEACHER
 
 if (process.env.HEROKU) {
-    pool = new Pool({connectionString:process.env.DATABASE_URL})
+    pool = new Pool({connectionString:process.env.DATABASE_URL,
+    ssl: {rejectUnauthorized: false}})
 } else {
   connectInfo = {
     user: process.env.DB_USERNAME,
