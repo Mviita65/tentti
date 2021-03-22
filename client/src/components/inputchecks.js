@@ -1,5 +1,5 @@
 
-function tarkistaSahkoposti(email) {
+const tarkistaSahkoposti = (email) => {
     if (email === undefined) {
         throw new Error('Sähköpostia ei välitetty, tarkista lomake!');
     }
@@ -7,7 +7,7 @@ function tarkistaSahkoposti(email) {
     return re.test(String(email).toLowerCase());
   }
 
-function tarkistaSalasana(str){
+const tarkistaSalasana = (str) => {
     // at least one number, one lowercase and one uppercase letter
     // at least six characters
     if (str === undefined) {
@@ -16,6 +16,7 @@ function tarkistaSalasana(str){
     return res.test(str);
   }
 
-  module.exports = {
-      tarkistaSahkoposti, tarkistaSalasana
+  export {
+      tarkistaSahkoposti, 
+      tarkistaSalasana
   }
